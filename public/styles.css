@@ -12,12 +12,80 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
   max-width: 720px;
   margin: 0 auto;
-  padding: 4rem 1.5rem;
+  padding: 2.5rem 1.5rem 4rem;
+  flex: 1;
+}
+
+.site-header {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid #e5e5e5;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-header .title-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.15s;
+}
+
+.site-header .title-container:hover {
+  opacity: 0.8;
+}
+
+.site-header .title-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.site-header h1 {
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+}
+
+.sign-in-link {
+  color: #737373;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  transition: color 0.15s;
+}
+
+.sign-in-link:hover {
+  color: #FF6D1F;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
 header {
@@ -48,16 +116,17 @@ h1 {
 }
 
 .tagline {
-  color: #737373;
-  font-size: 1.125rem;
-  font-weight: 400;
-  margin-top: 0.75rem;
-  line-height: 1.6;
+  color: #525252;
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
 }
 
 form {
   background: white;
-  padding: 2.5rem;
+  padding: 2rem;
   border-radius: 12px;
   border: 1px solid #e5e5e5;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -66,14 +135,14 @@ form {
 label {
   display: block;
   font-weight: 500;
-  margin-bottom: 0.875rem;
+  margin-bottom: 0.75rem;
   color: #1a1a1a;
   font-size: 0.9375rem;
 }
 
 textarea {
   width: 100%;
-  padding: 0.875rem 1rem;
+  padding: 1rem;
   border: 1px solid #d4d4d4;
   border-radius: 8px;
   font-size: 0.9375rem;
@@ -82,6 +151,7 @@ textarea {
   transition: border-color 0.15s, box-shadow 0.15s;
   background: #fafaf9;
   color: #1a1a1a;
+  min-height: 120px;
 }
 
 textarea:focus {
@@ -93,7 +163,7 @@ textarea:focus {
 
 button[type="submit"] {
   width: 100%;
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
   padding: 0.875rem 1.5rem;
   background: #FF6D1F;
   color: white;
@@ -292,6 +362,21 @@ footer {
   padding-bottom: 3rem;
 }
 
+.footer-nav {
+  margin-bottom: 1rem;
+}
+
+.footer-nav a {
+  color: #737373;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.footer-nav a:hover {
+  color: #FF6D1F;
+}
+
 footer a {
   color: #737373;
   text-decoration: none;
@@ -300,6 +385,88 @@ footer a {
 
 footer a:hover {
   color: #1a1a1a;
+}
+
+.back-link {
+  margin-bottom: 2rem;
+  margin-top: 0;
+}
+
+.back-link a {
+  color: #FF6D1F;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  transition: color 0.15s;
+}
+
+.back-link a:hover {
+  color: #d45a19;
+}
+
+.contact-email {
+  margin: 2rem 0;
+}
+
+.contact-email a {
+  color: #FF6D1F;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: color 0.15s;
+}
+
+.contact-email a:hover {
+  color: #d45a19;
+}
+
+.logo-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.logo-centered:hover {
+  opacity: 0.8;
+}
+
+main h1 {
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2rem;
+  letter-spacing: -0.03em;
+}
+
+main h2 {
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.03em;
+}
+
+main p {
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+main ul, main ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+main li {
+  margin-bottom: 0.5rem;
+  line-height: 1.7;
 }
 
 @media (max-width: 640px) {
@@ -325,7 +492,7 @@ footer a:hover {
   }
 
   form {
-    padding: 1.75rem;
+    padding: 1.5rem;
   }
 
   .result-card {
@@ -358,5 +525,50 @@ footer a:hover {
 
   #empty-state {
     padding: 2rem 1.5rem;
+  }
+
+  .container {
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  .site-header {
+    padding: 0.625rem 1rem;
+  }
+
+  .page-header {
+    margin-bottom: 2rem;
+  }
+
+  .tagline {
+    font-size: 1.0625rem;
+  }
+
+  .site-header .title-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .site-header h1 {
+    font-size: 1.125rem;
+  }
+
+  .site-header .title-container {
+    gap: 0.75rem;
+  }
+
+  .sign-in-link {
+    font-size: 0.875rem;
+  }
+
+  textarea {
+    min-height: 100px;
+  }
+
+  main h1 {
+    font-size: 1.75rem;
+  }
+
+  main h2 {
+    font-size: 1.125rem;
   }
 }
