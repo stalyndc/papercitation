@@ -11,6 +11,15 @@ const termsUsed = document.getElementById("terms-used");
 const errorMessage = document.getElementById("error-message");
 const emptyState = document.getElementById("empty-state");
 
+// Popular claims functionality
+const claimChips = document.querySelectorAll(".claim-chip");
+claimChips.forEach((chip) => {
+  chip.addEventListener("click", () => {
+    claimInput.value = chip.textContent;
+    claimInput.focus();
+  });
+});
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -27,6 +36,15 @@ form.addEventListener("submit", async (e) => {
   searchBtn.disabled = true;
   btnText.hidden = true;
   btnLoading.hidden = false;
+
+  // Progressive loading states
+  btnLoading.textContent = "Analyzing claim...";
+
+  setTimeout(() => {
+    if (!btnLoading.hidden) {
+      btnLoading.textContent = "Searching papers...";
+    }
+  }, 1000);
 
   try {
     const response = await fetch(API_URL, {
@@ -62,6 +80,7 @@ form.addEventListener("submit", async (e) => {
     searchBtn.disabled = false;
     btnText.hidden = false;
     btnLoading.hidden = true;
+    btnLoading.textContent = "Analyzing claim...";
   }
 });
 
@@ -76,19 +95,19 @@ function createResultCard(paper, index) {
   card.innerHTML = `
     <h3 class="result-title">${escapeHtml(paper.title)}</h3>
     <p class="result-meta">${escapeHtml(meta)}</p>
-    
-    <div class="citation-tabs">
-      <button class="tab-btn active" data-style="apa">APA</button>
-      <button class="tab-btn" data-style="mla">MLA</button>
-      <button class="tab-btn" data-style="chicago">Chicago</button>
-      <button class="tab-btn" data-style="harvard">Harvard</button>
+
+    <div class="citation-tabs" role="tablist" aria-label="Citation format options">
+      <button class="tab-btn active" role="tab" aria-selected="true" data-style="apa">APA</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="mla">MLA</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="chicago">Chicago</button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="harvard">Harvard</button>
     </div>
-    
+
     <div class="citation-box">
-      <button class="copy-btn">Copy</button>
+      <button class="copy-btn" aria-label="Copy citation to clipboard">Copy</button>
       <div class="citation-text">${paper.citations.apa}</div>
     </div>
-    
+
     ${
       paper.url
         ? `<a href="${escapeHtml(
@@ -104,8 +123,12 @@ function createResultCard(paper, index) {
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
-      tabs.forEach((t) => t.classList.remove("active"));
+      tabs.forEach((t) => {
+        t.classList.remove("active");
+        t.setAttribute("aria-selected", "false");
+      });
       tab.classList.add("active");
+      tab.setAttribute("aria-selected", "true");
       const style = tab.dataset.style;
       citationText.innerHTML = paper.citations[style];
     });
