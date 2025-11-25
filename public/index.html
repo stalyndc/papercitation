@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paper Citation — Find Academic Sources for Your Claims</title>
+    <meta
+      name="description"
+      content="Enter a claim and instantly find academic papers with ready-to-copy citations in APA, MLA, and Chicago formats."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Paper Citation</h1>
+        <p class="tagline">
+          Find academic sources for any claim. Instant citations.
+        </p>
+      </header>
+
+      <main>
+        <form id="search-form">
+          <label for="claim-input">What claim do you need a source for?</label>
+          <textarea
+            id="claim-input"
+            placeholder="e.g., Social media usage correlates with increased anxiety in teenagers"
+            rows="3"
+            required
+          ></textarea>
+          <button type="submit" id="search-btn">
+            <span class="btn-text">Find Sources</span>
+            <span class="btn-loading" hidden>Searching...</span>
+          </button>
+        </form>
+
+        <div id="results-section" hidden>
+          <div class="results-header">
+            <h2>Sources Found</h2>
+            <p class="search-terms">
+              Search terms: <span id="terms-used"></span>
+            </p>
+          </div>
+          <div id="results-list"></div>
+        </div>
+
+        <div id="error-message" hidden></div>
+        <div id="empty-state" hidden>
+          <p>
+            No academic sources found for this claim. Try rephrasing or being
+            more specific.
+          </p>
+        </div>
+      </main>
+
+      <footer>
+        <p>
+          Sources from
+          <a href="https://openalex.org" target="_blank" rel="noopener"
+            >OpenAlex</a
+          >. Always verify citations before submitting.
+        </p>
+      </footer>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
