@@ -1,4 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600&amp;display=swap');
+    </style>
+  </defs>
   <rect width="100" height="100" fill="#222222"/>
-  <text x="50" y="50" font-family="Arial, sans-serif" font-size="70" font-weight="bold" fill="#FF6D1F" text-anchor="middle" dominant-baseline="central">P</text>
+  <text x="50" y="55" font-family="'IBM Plex Mono', monospace" font-size="70" font-weight="600" fill="#FF6D1F" text-anchor="middle" dominant-baseline="central">P</text>
 </svg>
