@@ -1,7 +1,10 @@
-
 name = "papercitation-api"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
 
 [vars]
 ALLOWED_ORIGIN = "https://papercitation.com"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "65bf95acf4284921970bfd67a4fdb59d"

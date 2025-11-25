@@ -19,6 +19,26 @@ export default {
       });
     }
 
+    // Rate limiting
+    const clientIP = request.headers.get("CF-Connecting-IP") || "unknown";
+    const rateLimitResult = await checkRateLimit(env.RATE_LIMIT, clientIP);
+
+    if (!rateLimitResult.allowed) {
+      return new Response(
+        JSON.stringify({
+          error: "Too many requests. Please wait a minute and try again.",
+          retryAfter: rateLimitResult.retryAfter,
+        }),
+        {
+          status: 429,
+          headers: {
+            ...corsHeaders(),
+            "Retry-After": String(rateLimitResult.retryAfter),
+          },
+        }
+      );
+    }
+
     try {
       const { claim, style = "apa" } = await request.json();
 
@@ -76,7 +96,6 @@ export default {
     } catch (error) {
       console.error("Error:", error);
 
-      // More specific error messages
       if (error.message.includes("Gemini")) {
         return new Response(
           JSON.stringify({
@@ -112,6 +131,46 @@ export default {
   },
 };
 
+// Rate limiting: 20 requests per minute per IP
+async function checkRateLimit(kv, ip) {
+  const key = `rate:${ip}`;
+  const now = Date.now();
+  const windowMs = 60 * 1000; // 1 minute
+  const maxRequests = 20;
+
+  const data = await kv.get(key, { type: "json" });
+
+  if (!data) {
+    // First request from this IP
+    await kv.put(key, JSON.stringify({ count: 1, windowStart: now }), {
+      expirationTtl: 60,
+    });
+    return { allowed: true, remaining: maxRequests - 1 };
+  }
+
+  const { count, windowStart } = data;
+
+  if (now - windowStart > windowMs) {
+    // Window expired, reset
+    await kv.put(key, JSON.stringify({ count: 1, windowStart: now }), {
+      expirationTtl: 60,
+    });
+    return { allowed: true, remaining: maxRequests - 1 };
+  }
+
+  if (count >= maxRequests) {
+    // Rate limited
+    const retryAfter = Math.ceil((windowStart + windowMs - now) / 1000);
+    return { allowed: false, remaining: 0, retryAfter };
+  }
+
+  // Increment count
+  await kv.put(key, JSON.stringify({ count: count + 1, windowStart }), {
+    expirationTtl: 60,
+  });
+  return { allowed: true, remaining: maxRequests - count - 1 };
+}
+
 function corsHeaders() {
   return {
     "Content-Type": "application/json",
@@ -120,10 +179,7 @@ function corsHeaders() {
 }
 
 function sanitizeInput(input) {
-  // Limit length to prevent abuse
   let sanitized = input.slice(0, 500);
-
-  // Remove potential prompt injection patterns
   sanitized = sanitized
     .replace(/ignore previous instructions/gi, "")
     .replace(/disregard above/gi, "")
@@ -131,7 +187,6 @@ function sanitizeInput(input) {
     .replace(/system prompt/gi, "")
     .replace(/\n/g, " ")
     .trim();
-
   return sanitized;
 }
 
