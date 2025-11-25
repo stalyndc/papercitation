@@ -81,11 +81,12 @@ function createResultCard(paper, index) {
       <button class="tab-btn active" data-style="apa">APA</button>
       <button class="tab-btn" data-style="mla">MLA</button>
       <button class="tab-btn" data-style="chicago">Chicago</button>
+      <button class="tab-btn" data-style="harvard">Harvard</button>
     </div>
     
     <div class="citation-box">
       <button class="copy-btn">Copy</button>
-      <div class="citation-text">${escapeHtml(paper.citations.apa)}</div>
+      <div class="citation-text">${paper.citations.apa}</div>
     </div>
     
     ${
@@ -106,7 +107,7 @@ function createResultCard(paper, index) {
       tabs.forEach((t) => t.classList.remove("active"));
       tab.classList.add("active");
       const style = tab.dataset.style;
-      citationText.textContent = paper.citations[style];
+      citationText.innerHTML = paper.citations[style];
     });
   });
 
