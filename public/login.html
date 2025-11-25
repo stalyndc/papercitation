@@ -41,17 +41,13 @@
           </p>
 
           <div class="signup-section">
-            <div id="beehiiv-embed">
-              <!-- Beehiiv email signup form will be embedded here -->
-            </div>
-            
-            <p class="signup-prompt">
-              Enter your email to get notified when we launch.
-            </p>
+            <iframe src="https://subscribe-forms.beehiiv.com/63237a84-9399-4ac1-b937-75988b6c2e67" class="beehiiv-embed" data-test-id="beehiiv-embed" frameborder="0" scrolling="no" style="margin: 0; border-radius: 8px !important; background-color: transparent;"></iframe>
           </div>
         </main>
       </div>
     </div>
+
+    <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
 
     <style>
       .login-page {
@@ -91,7 +87,7 @@
       }
 
       .login-main {
-        max-width: 480px;
+        max-width: 600px;
         width: 100%;
       }
 
@@ -113,31 +109,15 @@
 
       .signup-section {
         margin-bottom: 2rem;
-      }
-
-      #beehiiv-embed {
-        min-height: 100px;
-        border: 2px dashed #e5e5e5;
-        border-radius: 8px;
         display: flex;
-        align-items: center;
         justify-content: center;
-        margin-bottom: 1rem;
-        padding: 1rem;
-        background: white;
       }
 
-      #beehiiv-embed::before {
-        content: "Email signup form placeholder";
-        color: #a3a3a3;
-        font-size: 0.875rem;
-        font-style: italic;
-      }
-
-      .signup-prompt {
-        font-size: 0.9375rem;
-        color: #737373;
-        margin: 0;
+      .beehiiv-embed {
+        width: 100%;
+        max-width: 560px;
+        height: 339px;
+        border: none;
       }
 
       .back-link {
@@ -176,6 +156,10 @@
 
         .premium-features {
           font-size: 1rem;
+        }
+
+        .beehiiv-embed {
+          height: 320px;
         }
       }
     </style>
