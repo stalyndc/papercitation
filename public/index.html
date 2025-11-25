@@ -30,14 +30,28 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
     <div class="container">
       <header>
-        <h1>Paper Citation</h1>
+        <div class="title-container">
+          <svg class="title-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#FF6D1F;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#d45a19;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <path d="M9 4.5C9 3.67 9.67 3 10.5 3h8C19.33 3 20 3.67 20 4.5v15c0 .83-.67 1.5-1.5 1.5h-8c-.83 0-1.5-.67-1.5-1.5v-15z" stroke="url(#iconGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 8.5C6 7.67 6.67 7 7.5 7H9v10H7.5C6.67 17 6 16.33 6 15.5v-7z" stroke="url(#iconGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 12.5C3 11.67 3.67 11 4.5 11H6v2H4.5C3.67 13 3 12.33 3 11.5v-1z" stroke="url(#iconGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13 8h4M13 12h4M13 16h4" stroke="url(#iconGradient)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h1>Paper Citation</h1>
+        </div>
         <p class="tagline">
           Find academic sources for any claim. Instant citations.
         </p>
