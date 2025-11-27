@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Sora:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -32,8 +32,8 @@
           <svg class="title-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#FF6D1F;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#d45a19;stop-opacity:1" />
+                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:1" />
               </linearGradient>
             </defs>
             <path d="M9 4.5C9 3.67 9.67 3 10.5 3h8C19.33 3 20 3.67 20 4.5v15c0 .83-.67 1.5-1.5 1.5h-8c-.83 0-1.5-.67-1.5-1.5v-15z" stroke="url(#iconGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -96,20 +96,23 @@
       }
 
       .blog-header h1 {
-        font-family: "IBM Plex Mono", "Courier New", monospace;
-        font-size: 2.5rem;
-        font-weight: 600;
-        color: #1a1a1a;
+        font-family: "Sora", "Source Serif Pro", Georgia, serif;
+        font-size: 2.35rem;
+        font-weight: 700;
+        color: var(--text-primary);
         margin-bottom: 1rem;
-        letter-spacing: -0.03em;
+        letter-spacing: -0.02em;
       }
 
       .blog-subtitle {
         font-size: 1.125rem;
-        color: #737373;
+        color: var(--text-secondary);
         font-weight: 400;
         line-height: 1.6;
         margin: 0;
+        max-width: 520px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       .blog-posts-grid {
@@ -119,19 +122,22 @@
       }
 
       .blog-card {
-        background: white;
-        padding: 2rem;
-        border-radius: 12px;
-        border: 1px solid #e5e5e5;
-        transition: all 0.2s;
+        background: var(--bg-white);
+        padding: 1.75rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        transition: transform 0.2s, box-shadow 0.25s, border-color 0.25s;
         text-decoration: none;
         display: block;
         cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
       }
 
       .blog-card:hover {
-        border-color: #d4d4d4;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border-color: #d0cec9;
+        box-shadow: var(--shadow-hover);
         transform: translateY(-2px);
       }
 
@@ -140,37 +146,37 @@
       }
 
       .blog-card-title {
-        font-family: "IBM Plex Mono", monospace;
+        font-family: "Source Serif Pro", Georgia, serif;
         font-size: 1.5rem;
         font-weight: 600;
-        color: #1a1a1a;
+        color: var(--text-primary);
         margin: 0 0 0.5rem 0;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
         line-height: 1.4;
       }
 
       .blog-card-meta {
         font-size: 0.875rem;
-        color: #a3a3a3;
+        color: var(--text-tertiary);
         margin: 0 0 1rem 0;
       }
 
       .blog-card-excerpt {
         font-size: 0.9375rem;
-        color: #525252;
+        color: var(--text-secondary);
         line-height: 1.6;
         margin: 0;
       }
 
       .blog-card a {
-        color: #FF6D1F;
+        color: var(--accent);
         text-decoration: none;
         font-weight: 500;
         transition: color 0.15s;
       }
 
       .blog-card a:hover {
-        color: #d45a19;
+        color: var(--primary);
       }
 
       @media (max-width: 640px) {

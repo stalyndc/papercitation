@@ -81,6 +81,8 @@ export default {
           paper.primary_location?.source?.display_name || "Unknown Source",
         doi: paper.doi,
         url: paper.doi || paper.primary_location?.landing_page_url || null,
+        cited_by_count: paper.cited_by_count,
+        is_oa: paper.open_access?.is_oa || false,
         citations: {
           apa: formatAPA(paper),
           mla: formatMLA(paper),

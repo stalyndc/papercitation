@@ -87,12 +87,29 @@ form.addEventListener("submit", async (e) => {
 function createResultCard(paper, index) {
   const card = document.createElement("div");
   card.className = "result-card";
+  if (paper.is_oa) {
+    card.classList.add("is-oa");
+  }
+  if (paper.cited_by_count && paper.cited_by_count >= 100) {
+    card.classList.add("is-cited");
+  }
 
   const authors =
     paper.authors.map((a) => a.name).join(", ") || "Unknown Author";
   const meta = `${authors} • ${paper.year} • ${paper.journal}`;
 
+  // Generate badges HTML
+  let badgesHtml = '<div class="result-badges">';
+  if (paper.cited_by_count) {
+    badgesHtml += `<span class="badge badge-citation">Cited by ${paper.cited_by_count}</span>`;
+  }
+  if (paper.is_oa) {
+    badgesHtml += `<span class="badge badge-oa">Open Access</span>`;
+  }
+  badgesHtml += '</div>';
+
   card.innerHTML = `
+    ${badgesHtml}
     <h3 class="result-title">${escapeHtml(paper.title)}</h3>
     <p class="result-meta">${escapeHtml(meta)}</p>
 

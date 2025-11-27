@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Sora:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -31,8 +31,8 @@
           <svg class="title-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#FF6D1F;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#d45a19;stop-opacity:1" />
+                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:1" />
               </linearGradient>
             </defs>
             <path d="M9 4.5C9 3.67 9.67 3 10.5 3h8C19.33 3 20 3.67 20 4.5v15c0 .83-.67 1.5-1.5 1.5h-8c-.83 0-1.5-.67-1.5-1.5v-15z" stroke="url(#iconGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -52,6 +52,9 @@
 
           <div class="signup-section">
             <iframe src="https://subscribe-forms.beehiiv.com/63237a84-9399-4ac1-b937-75988b6c2e67" class="beehiiv-embed" data-test-id="beehiiv-embed" frameborder="0" scrolling="no" style="margin: 0; border-radius: 8px !important; background-color: transparent;"></iframe>
+            <p class="signup-fallback">
+              If the form doesn't load, <a href="https://subscribe-forms.beehiiv.com/63237a84-9399-4ac1-b937-75988b6c2e67" target="_blank" rel="noopener">open it in a new tab</a>.
+            </p>
           </div>
         </main>
       </div>
@@ -61,7 +64,7 @@
 
     <style>
       .login-page {
-        background: #fafaf9;
+        background: radial-gradient(120% 120% at 50% 0%, rgba(59, 130, 246, 0.08), transparent 55%), #fafaf9;
       }
 
       .login-container {
@@ -88,12 +91,12 @@
       }
 
       .logo-centered h1 {
-        font-family: "IBM Plex Mono", "Courier New", monospace;
+        font-family: "Source Serif Pro", Georgia, serif;
         font-size: 2rem;
         font-weight: 600;
-        color: #1a1a1a;
+        color: #111827;
         margin: 0;
-        letter-spacing: -0.03em;
+        letter-spacing: -0.02em;
       }
 
       .login-main {
@@ -102,32 +105,60 @@
       }
 
       .coming-soon {
-        font-family: "IBM Plex Mono", "Courier New", monospace;
-        font-size: 2.5rem;
-        font-weight: 600;
-        color: #1a1a1a;
+        font-family: "Sora", "Source Serif Pro", Georgia, serif;
+        font-size: 2.4rem;
+        font-weight: 700;
+        color: var(--text-primary);
         margin-bottom: 1.5rem;
-        letter-spacing: -0.03em;
+        letter-spacing: -0.02em;
       }
 
       .premium-features {
         font-size: 1.125rem;
-        color: #737373;
+        color: var(--text-secondary);
         line-height: 1.6;
         margin-bottom: 2.5rem;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 540px;
       }
 
       .signup-section {
         margin-bottom: 2rem;
-        display: flex;
+        display: grid;
         justify-content: center;
+        background: var(--bg-white);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        gap: 0.75rem;
       }
 
       .beehiiv-embed {
         width: 100%;
         max-width: 560px;
-        height: 339px;
+        height: 520px;
         border: none;
+        overflow: visible;
+      }
+
+      .signup-fallback {
+        text-align: center;
+        font-size: 0.9375rem;
+        color: var(--text-secondary);
+        margin: 0;
+      }
+
+      .signup-fallback a {
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .signup-fallback a:hover {
+        color: var(--primary);
+        text-decoration: underline;
       }
 
       .back-link {
@@ -135,7 +166,7 @@
       }
 
       .back-link a {
-        color: #FF6D1F;
+        color: #3b82f6;
         text-decoration: none;
         font-weight: 500;
         font-size: 0.9375rem;
@@ -143,7 +174,7 @@
       }
 
       .back-link a:hover {
-        color: #d45a19;
+        color: #1e3a8a;
       }
 
       @media (max-width: 640px) {
@@ -169,7 +200,7 @@
         }
 
         .beehiiv-embed {
-          height: 320px;
+          height: 520px;
         }
       }
     </style>

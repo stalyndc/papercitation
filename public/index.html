@@ -40,7 +40,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Sora:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -51,8 +51,8 @@
           <svg class="title-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#FF6D1F;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#d45a19;stop-opacity:1" />
+                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:1" />
               </linearGradient>
             </defs>
             <path d="M9 4.5C9 3.67 9.67 3 10.5 3h8C19.33 3 20 3.67 20 4.5v15c0 .83-.67 1.5-1.5 1.5h-8c-.83 0-1.5-.67-1.5-1.5v-15z" stroke="url(#iconGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -72,31 +72,25 @@
           <p class="tagline">
             Find academic sources for any claim. Instant citations.
           </p>
-          <div class="stats-bar">
-            <span class="stat">
-              <svg class="stat-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
-                <line x1="8" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="2"/>
-                <line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="2"/>
-                <line x1="8" y1="17" x2="12" y2="17" stroke="currentColor" stroke-width="2"/>
-              </svg>
-              <span class="stat-text">250M+ Papers</span>
-            </span>
-            <span class="stat-separator">·</span>
-            <span class="stat">
-              <svg class="stat-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 6.10457 9.89543 7 11 7H13C14.1046 7 15 6.10457 15 5M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              <span class="stat-text">4 Citation Formats</span>
-            </span>
-            <span class="stat-separator">·</span>
-            <span class="stat">
-              <svg class="stat-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <span class="stat-text">Free, No Account</span>
-            </span>
+          <p class="tagline-support">
+            Type a claim, skim the best-matching papers, and copy ready-to-use citations without digging through PDFs.
+          </p>
+          <div class="hero-actions">
+            <a class="secondary-link" href="#popular-claims">See popular examples</a>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-number">250M+</span>
+              <span class="stat-label">Papers Indexed</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">4</span>
+              <span class="stat-label">Citation Formats</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">Free</span>
+              <span class="stat-label">No Account Needed</span>
+            </div>
           </div>
         </header>
 
@@ -115,7 +109,7 @@
           </button>
         </form>
 
-        <div class="popular-claims">
+        <div class="popular-claims" id="popular-claims">
           <p class="popular-label">Popular searches:</p>
           <button class="claim-chip" type="button">Social media affects mental health in teenagers</button>
           <button class="claim-chip" type="button">Climate change impacts biodiversity</button>
@@ -134,14 +128,21 @@
 
         <div id="error-message" hidden></div>
         <div id="empty-state" hidden>
+          <div class="empty-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
           <h3>No sources found</h3>
           <p>We couldn't find academic papers matching your claim.</p>
           <div class="empty-state-tips">
             <p><strong>Try these tips:</strong></p>
             <ul>
-              <li>Try being more specific</li>
-              <li>Use academic terms</li>
-              <li>Break complex claims into parts</li>
+              <li>Make your claim more specific</li>
+              <li>Use academic terminology</li>
+              <li>Break complex claims into simpler parts</li>
+              <li>Check for typos</li>
             </ul>
           </div>
         </div>
