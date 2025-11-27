@@ -134,7 +134,7 @@
               </div>
             </div>
           </div>
-          <div id="results-list"></div>
+          <div id="results-list" role="region" aria-live="polite" aria-label="Search results"></div>
         </div>
 
         <div id="error-message" role="alert" aria-live="assertive" hidden></div>
@@ -162,7 +162,7 @@
 
       <footer>
         <div class="footer-nav">
-          <a href="about.html">About</a> · <a href="blog/">Blog</a> · <a href="contact.html">Contact</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
+          <a href="about.html">About</a> · <a href="log.html">Update Log</a> · <a href="saved.html">Saved</a> · <a href="blog/">Blog</a> · <a href="contact.html">Contact</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>
         </div>
         <p>
           Sources from
@@ -177,6 +177,8 @@
     <div id="live-region" class="sr-live" aria-live="polite" aria-atomic="true"></div>
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-VDkUfDvfHQwZ0pniS3pSke1Mt2rt7NmBGG99nmCaTKty+PBkO5OVwOB1p5MNDoAuCEi0aKBslZxW3QAtF5pP2w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="animations.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

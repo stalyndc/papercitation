@@ -380,6 +380,11 @@ button[type="submit"]:disabled {
   box-shadow: var(--shadow-md);
 }
 
+.ghost-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .ghost-hint {
   font-size: 0.85rem;
   color: var(--success-green);
@@ -658,6 +663,10 @@ button[type="submit"]:disabled {
   border-color: var(--success-bg);
   background: var(--success-bg);
   box-shadow: none;
+}
+
+.utility-bar.is-active {
+  animation: fadeIn 0.4s ease-out;
 }
 
 .toast {
@@ -1026,4 +1035,13 @@ footer p a:hover {
 .changelog {
   margin-top: 0.5rem;
   color: var(--text-tertiary);
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

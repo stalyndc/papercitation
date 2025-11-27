@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
+Allow: /saved.html
+Allow: /log.html
 Sitemap: https://papercitation.com/sitemap.xml

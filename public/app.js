@@ -168,12 +168,7 @@ function createResultCard(paper, index) {
     paper.journal || "Journal not provided"
   }`;
   const qualityHtml = buildQualityBadges(paper);
-  const citations = paper.citations || {
-    apa: "Citation unavailable",
-    mla: "Citation unavailable",
-    chicago: "Citation unavailable",
-    harvard: "Citation unavailable",
-  };
+  const citations = normalizeCitations(paper.citations);
   const lastStyle = getLastStyle();
 
   // Generate badges HTML
@@ -389,6 +384,22 @@ function setLastStyle(style) {
 
 function getLastStyle() {
   return sessionStorage.getItem(CITATION_STYLE_KEY) || "apa";
+}
+
+function normalizeCitations(c) {
+  const defaults = {
+    apa: "Citation unavailable",
+    mla: "Citation unavailable",
+    chicago: "Citation unavailable",
+    harvard: "Citation unavailable",
+  };
+  if (!c) return defaults;
+  return {
+    apa: c.apa || c.APA || defaults.apa,
+    mla: c.mla || c.MLA || defaults.mla,
+    chicago: c.chicago || c.Chicago || defaults.chicago,
+    harvard: c.harvard || c.Harvard || defaults.harvard,
+  };
 }
 
 function showToast(message) {
