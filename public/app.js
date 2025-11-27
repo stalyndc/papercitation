@@ -16,12 +16,15 @@ const shareLinkBtn = document.getElementById("share-link-btn");
 const shareHint = document.getElementById("share-hint");
 const saveBundleBtn = document.getElementById("save-bundle-btn");
 const saveHint = document.getElementById("save-hint");
+const toastEl = document.getElementById("toast");
+const liveRegion = document.getElementById("live-region");
 
 let latestClaim = "";
 let latestSearchTerms = "";
 let latestResults = [];
 const BUNDLE_KEY = "paperCitationBundles";
 const SAVED_PAPERS_KEY = "paperCitationSavedPapers";
+const CITATION_STYLE_KEY = "paperCitationStyle";
 
 if (utilityBar) {
   utilityBar.hidden = true;
@@ -57,9 +60,10 @@ shareLinkBtn?.addEventListener("click", async () => {
   url.searchParams.set("claim", latestClaim);
   try {
     await navigator.clipboard.writeText(url.toString());
-    showHint(shareHint);
+    showToast("Shareable link copied");
   } catch (err) {
     window.prompt("Copy this link", url.toString());
+    showToast("Copy this link manually");
   }
 });
 
@@ -71,7 +75,7 @@ saveBundleBtn?.addEventListener("click", () => {
     results: latestResults.slice(0, 5),
     savedAt: Date.now(),
   });
-  showHint(saveHint);
+  showToast("Results saved locally");
 });
 
 function showHint(el) {
@@ -129,6 +133,7 @@ async function performSearch(claim) {
   } catch (error) {
     errorMessage.textContent = `${error.message}. If this persists, email info@papercitation.com.`;
     errorMessage.hidden = false;
+    announce(errorMessage.textContent);
   } finally {
     searchBtn.disabled = false;
     btnText.hidden = false;
@@ -169,6 +174,7 @@ function createResultCard(paper, index) {
     chicago: "Citation unavailable",
     harvard: "Citation unavailable",
   };
+  const lastStyle = getLastStyle();
 
   // Generate badges HTML
   let badgesHtml = '<div class="result-badges">';
@@ -195,7 +201,7 @@ function createResultCard(paper, index) {
 
     <div class="citation-box">
       <button class="copy-btn" aria-label="Copy citation to clipboard">Copy</button>
-      <div class="citation-text">${citations.apa}</div>
+      <div class="citation-text">${citations[lastStyle] || citations.apa}</div>
     </div>
 
     <div class="result-actions">
@@ -214,6 +220,17 @@ function createResultCard(paper, index) {
   const tabs = card.querySelectorAll(".tab-btn");
   const citationText = card.querySelector(".citation-text");
 
+  // set initial active style
+  tabs.forEach((tab) => {
+    if (tab.dataset.style === lastStyle) {
+      tab.classList.add("active");
+      tab.setAttribute("aria-selected", "true");
+    } else {
+      tab.setAttribute("aria-selected", "false");
+      tab.classList.remove("active");
+    }
+  });
+
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       tabs.forEach((t) => {
@@ -223,7 +240,8 @@ function createResultCard(paper, index) {
       tab.classList.add("active");
       tab.setAttribute("aria-selected", "true");
       const style = tab.dataset.style;
-      citationText.innerHTML = citations[style];
+      setLastStyle(style);
+      citationText.innerHTML = citations[style] || citations.apa;
     });
   });
 
@@ -234,6 +252,7 @@ function createResultCard(paper, index) {
     await navigator.clipboard.writeText(text);
     copyBtn.textContent = "Copied!";
     copyBtn.classList.add("copied");
+    announce("Citation copied");
     setTimeout(() => {
       copyBtn.textContent = "Copy";
       copyBtn.classList.remove("copied");
@@ -241,14 +260,22 @@ function createResultCard(paper, index) {
   });
 
   const saveBtn = card.querySelector(".save-btn");
+  const alreadySaved = isPaperSaved(paper);
+  if (alreadySaved) {
+    saveBtn.textContent = "Saved";
+    saveBtn.classList.add("saved");
+    saveBtn.setAttribute("aria-pressed", "true");
+  }
   saveBtn.addEventListener("click", () => {
+    if (isPaperSaved(paper)) {
+      showToast("Already saved");
+      return;
+    }
     savePaper({ paper, claim: latestClaim });
     saveBtn.textContent = "Saved";
     saveBtn.classList.add("saved");
-    setTimeout(() => {
-      saveBtn.textContent = "Save citation";
-      saveBtn.classList.remove("saved");
-    }, 1600);
+    saveBtn.setAttribute("aria-pressed", "true");
+    showToast("Citation saved");
   });
 
   return card;
@@ -311,7 +338,9 @@ function saveBundle(bundle) {
 function savePaper({ paper, claim }) {
   if (!paper) return;
   const existing = getSavedPapers();
-  const filtered = existing.filter((p) => p.paper.id !== paper.id && p.paper.title !== paper.title);
+  const filtered = existing.filter(
+    (p) => !isSamePaper(p.paper, paper)
+  );
   filtered.unshift({
     paper,
     claim,
@@ -331,6 +360,17 @@ function getSavedPapers() {
   }
 }
 
+function isSamePaper(a, b) {
+  if (!a || !b) return false;
+  if (a.id && b.id && a.id === b.id) return true;
+  return a.title && b.title && a.title === b.title;
+}
+
+function isPaperSaved(paper) {
+  const saved = getSavedPapers();
+  return saved.some((p) => isSamePaper(p.paper, paper));
+}
+
 function hydrateFromQuery() {
   const params = new URLSearchParams(window.location.search);
   const claim = params.get("claim");
@@ -341,3 +381,31 @@ function hydrateFromQuery() {
 }
 
 hydrateFromQuery();
+
+function setLastStyle(style) {
+  if (!style) return;
+  sessionStorage.setItem(CITATION_STYLE_KEY, style);
+}
+
+function getLastStyle() {
+  return sessionStorage.getItem(CITATION_STYLE_KEY) || "apa";
+}
+
+function showToast(message) {
+  if (!toastEl) return;
+  toastEl.textContent = message;
+  toastEl.hidden = false;
+  announce(message);
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(() => {
+    toastEl.hidden = true;
+  }, 1800);
+}
+
+function announce(message) {
+  if (!liveRegion) return;
+  liveRegion.textContent = "";
+  setTimeout(() => {
+    liveRegion.textContent = message;
+  }, 50);
+}
