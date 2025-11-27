@@ -10,6 +10,23 @@ const resultsList = document.getElementById("results-list");
 const termsUsed = document.getElementById("terms-used");
 const errorMessage = document.getElementById("error-message");
 const emptyState = document.getElementById("empty-state");
+const retrySimpleBtn = document.getElementById("retry-simple-btn");
+const utilityBar = document.getElementById("utility-bar");
+const shareLinkBtn = document.getElementById("share-link-btn");
+const shareHint = document.getElementById("share-hint");
+const saveBundleBtn = document.getElementById("save-bundle-btn");
+const saveHint = document.getElementById("save-hint");
+
+let latestClaim = "";
+let latestSearchTerms = "";
+let latestResults = [];
+const BUNDLE_KEY = "paperCitationBundles";
+const SAVED_PAPERS_KEY = "paperCitationSavedPapers";
+
+if (utilityBar) {
+  utilityBar.hidden = true;
+  utilityBar.classList.remove("is-active");
+}
 
 // Popular claims functionality
 const claimChips = document.querySelectorAll(".claim-chip");
@@ -22,22 +39,61 @@ claimChips.forEach((chip) => {
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-
   const claim = claimInput.value.trim();
   if (!claim) return;
+  performSearch(claim);
+});
 
-  // Reset UI
+retrySimpleBtn?.addEventListener("click", () => {
+  if (!latestClaim) return;
+  const simplified = simplifyClaimText(latestClaim);
+  claimInput.value = simplified;
+  performSearch(simplified, { simplified: true });
+});
+
+shareLinkBtn?.addEventListener("click", async () => {
+  if (!latestClaim) return;
+  const url = new URL(window.location.href);
+  url.searchParams.set("claim", latestClaim);
+  try {
+    await navigator.clipboard.writeText(url.toString());
+    showHint(shareHint);
+  } catch (err) {
+    window.prompt("Copy this link", url.toString());
+  }
+});
+
+saveBundleBtn?.addEventListener("click", () => {
+  if (!latestClaim || !latestResults.length) return;
+  saveBundle({
+    claim: latestClaim,
+    searchTerms: latestSearchTerms,
+    results: latestResults.slice(0, 5),
+    savedAt: Date.now(),
+  });
+  showHint(saveHint);
+});
+
+function showHint(el) {
+  if (!el) return;
+  el.hidden = false;
+  setTimeout(() => {
+    el.hidden = true;
+  }, 1800);
+}
+
+async function performSearch(claim) {
+  latestClaim = claim;
+  utilityBar.hidden = true;
+  utilityBar.classList.remove("is-active");
   resultsSection.hidden = true;
   errorMessage.hidden = true;
   emptyState.hidden = true;
   resultsList.innerHTML = "";
 
-  // Show loading state
   searchBtn.disabled = true;
   btnText.hidden = true;
   btnLoading.hidden = false;
-
-  // Progressive loading states
   btnLoading.textContent = "Analyzing claim...";
 
   setTimeout(() => {
@@ -64,17 +120,14 @@ form.addEventListener("submit", async (e) => {
       return;
     }
 
-    // Display results
-    termsUsed.textContent = data.searchTerms;
-
-    data.results.forEach((paper, index) => {
-      const card = createResultCard(paper, index);
-      resultsList.appendChild(card);
-    });
-
-    resultsSection.hidden = false;
+    latestResults = data.results;
+    latestSearchTerms = data.searchTerms;
+    renderResults(latestResults, latestSearchTerms);
+    utilityBar.hidden = false;
+    utilityBar.classList.add("is-active");
+    updateUrlWithClaim(claim);
   } catch (error) {
-    errorMessage.textContent = error.message;
+    errorMessage.textContent = `${error.message}. If this persists, email info@papercitation.com.`;
     errorMessage.hidden = false;
   } finally {
     searchBtn.disabled = false;
@@ -82,7 +135,17 @@ form.addEventListener("submit", async (e) => {
     btnLoading.hidden = true;
     btnLoading.textContent = "Analyzing claim...";
   }
-});
+}
+
+function renderResults(results, searchTermsText) {
+  resultsList.innerHTML = "";
+  termsUsed.textContent = searchTermsText || "";
+  results.forEach((paper, index) => {
+    const card = createResultCard(paper, index);
+    resultsList.appendChild(card);
+  });
+  resultsSection.hidden = false;
+}
 
 function createResultCard(paper, index) {
   const card = document.createElement("div");
@@ -96,7 +159,16 @@ function createResultCard(paper, index) {
 
   const authors =
     paper.authors.map((a) => a.name).join(", ") || "Unknown Author";
-  const meta = `${authors} • ${paper.year} • ${paper.journal}`;
+  const meta = `${authors} • ${paper.year || "Year n/a"} • ${
+    paper.journal || "Journal not provided"
+  }`;
+  const qualityHtml = buildQualityBadges(paper);
+  const citations = paper.citations || {
+    apa: "Citation unavailable",
+    mla: "Citation unavailable",
+    chicago: "Citation unavailable",
+    harvard: "Citation unavailable",
+  };
 
   // Generate badges HTML
   let badgesHtml = '<div class="result-badges">';
@@ -112,6 +184,7 @@ function createResultCard(paper, index) {
     ${badgesHtml}
     <h3 class="result-title">${escapeHtml(paper.title)}</h3>
     <p class="result-meta">${escapeHtml(meta)}</p>
+    ${qualityHtml}
 
     <div class="citation-tabs" role="tablist" aria-label="Citation format options">
       <button class="tab-btn active" role="tab" aria-selected="true" data-style="apa">APA</button>
@@ -122,16 +195,19 @@ function createResultCard(paper, index) {
 
     <div class="citation-box">
       <button class="copy-btn" aria-label="Copy citation to clipboard">Copy</button>
-      <div class="citation-text">${paper.citations.apa}</div>
+      <div class="citation-text">${citations.apa}</div>
     </div>
 
-    ${
-      paper.url
-        ? `<a href="${escapeHtml(
-            paper.url
-          )}" target="_blank" rel="noopener" class="result-link">View Paper →</a>`
-        : ""
-    }
+    <div class="result-actions">
+      ${
+        paper.url
+          ? `<a href="${escapeHtml(
+              paper.url
+            )}" target="_blank" rel="noopener" class="result-link">View Paper →</a>`
+          : ""
+      }
+      <button class="save-btn" type="button">Save citation</button>
+    </div>
   `;
 
   // Tab switching
@@ -147,14 +223,14 @@ function createResultCard(paper, index) {
       tab.classList.add("active");
       tab.setAttribute("aria-selected", "true");
       const style = tab.dataset.style;
-      citationText.innerHTML = paper.citations[style];
+      citationText.innerHTML = citations[style];
     });
   });
 
   // Copy functionality
   const copyBtn = card.querySelector(".copy-btn");
   copyBtn.addEventListener("click", async () => {
-    const text = citationText.textContent;
+    const text = citationText.textContent || citations.apa;
     await navigator.clipboard.writeText(text);
     copyBtn.textContent = "Copied!";
     copyBtn.classList.add("copied");
@@ -164,7 +240,38 @@ function createResultCard(paper, index) {
     }, 2000);
   });
 
+  const saveBtn = card.querySelector(".save-btn");
+  saveBtn.addEventListener("click", () => {
+    savePaper({ paper, claim: latestClaim });
+    saveBtn.textContent = "Saved";
+    saveBtn.classList.add("saved");
+    setTimeout(() => {
+      saveBtn.textContent = "Save citation";
+      saveBtn.classList.remove("saved");
+    }, 1600);
+  });
+
   return card;
+}
+
+function buildQualityBadges(paper) {
+  const badges = [];
+  const currentYear = new Date().getFullYear();
+
+  if (paper.year && currentYear - paper.year <= 5) {
+    badges.push(`<span class="quality-badge"><span class="dot"></span>Recent (&lt;5y)</span>`);
+  }
+
+  if (paper.cited_by_count) {
+    if (paper.cited_by_count >= 500) {
+      badges.push(`<span class="quality-badge"><span class="dot"></span>Highly cited</span>`);
+    } else if (paper.cited_by_count >= 100) {
+      badges.push(`<span class="quality-badge"><span class="dot"></span>Cited 100+ times</span>`);
+    }
+  }
+
+  if (!badges.length) return "";
+  return `<div class="result-quality">${badges.join("")}</div>`;
 }
 
 function escapeHtml(text) {
@@ -172,3 +279,65 @@ function escapeHtml(text) {
   div.textContent = text;
   return div.innerHTML;
 }
+
+function updateUrlWithClaim(claim) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("claim", claim);
+  window.history.replaceState({}, "", url);
+}
+
+function simplifyClaimText(claim) {
+  return claim.replace(/[,;:]/g, "").replace(/\s+/g, " ").trim().slice(0, 140);
+}
+
+function getBundles() {
+  const raw = localStorage.getItem(BUNDLE_KEY);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+function saveBundle(bundle) {
+  const existing = getBundles();
+  const filtered = existing.filter((b) => b.claim !== bundle.claim);
+  filtered.unshift(bundle);
+  const trimmed = filtered.slice(0, 5);
+  localStorage.setItem(BUNDLE_KEY, JSON.stringify(trimmed));
+}
+
+function savePaper({ paper, claim }) {
+  if (!paper) return;
+  const existing = getSavedPapers();
+  const filtered = existing.filter((p) => p.paper.id !== paper.id && p.paper.title !== paper.title);
+  filtered.unshift({
+    paper,
+    claim,
+    savedAt: Date.now(),
+  });
+  const trimmed = filtered.slice(0, 20);
+  localStorage.setItem(SAVED_PAPERS_KEY, JSON.stringify(trimmed));
+}
+
+function getSavedPapers() {
+  const raw = localStorage.getItem(SAVED_PAPERS_KEY);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+function hydrateFromQuery() {
+  const params = new URLSearchParams(window.location.search);
+  const claim = params.get("claim");
+  if (claim) {
+    claimInput.value = claim;
+    performSearch(claim);
+  }
+}
+
+hydrateFromQuery();

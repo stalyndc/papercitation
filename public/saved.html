@@ -1,20 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PXQQVNJGH7"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-PXQQVNJGH7');
-    </script>
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact — Paper Citation</title>
-    <meta name="description" content="Contact Paper Citation - get in touch with our team for questions, feedback, or support." />
+    <title>Saved Citations — Paper Citation</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -54,33 +43,29 @@
         </div>
 
         <main class="content-main">
-          <h1>Contact Us</h1>
-          
-          <p>
-            We'd love to hear from you! Whether you have questions, feedback, or suggestions for improving Paper Citation, please don't hesitate to reach out.
-          </p>
+          <div class="saved-top">
+            <div>
+              <h1>Saved citations</h1>
+              <p>Stored locally in your browser for up to 20 items, until you clear them.</p>
+            </div>
+            <button class="ghost-btn ghost-small" id="clear-all-btn" type="button">Clear all</button>
+          </div>
 
-          <h2>Get in Touch</h2>
-          <p>
-            The best way to contact us is via email:
-          </p>
-          <p class="contact-email">
-            <a href="mailto:info@papercitation.com">info@papercitation.com</a>
-          </p>
+          <section class="saved-section">
+            <h2>Individual citations</h2>
+            <div id="saved-list" class="saved-list"></div>
+          </section>
 
-          <h2>What can we help with?</h2>
-          <ul>
-            <li>Questions about how Paper Citation works</li>
-            <li>Feature requests and suggestions</li>
-            <li>Technical issues or bug reports</li>
-            <li>Partnership opportunities</li>
-            <li>Media inquiries</li>
-            <li>General feedback and comments</li>
-          </ul>
-
-          <p>
-            We aim to respond to all inquiries within 24-48 hours during business days. Your feedback helps us improve Paper Citation for everyone!
-          </p>
+          <section class="saved-section">
+            <div class="saved-top">
+              <div>
+                <h2>Saved sets</h2>
+                <p>Bundles saved from search (up to 5 sets).</p>
+              </div>
+              <button class="ghost-btn ghost-small" id="clear-sets-btn" type="button">Clear sets</button>
+            </div>
+            <div id="saved-sets" class="saved-list"></div>
+          </section>
         </main>
 
         <footer>
@@ -96,5 +81,7 @@
         </footer>
       </div>
     </div>
+
+    <script src="saved.js"></script>
   </body>
 </html>
