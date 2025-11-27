@@ -408,7 +408,9 @@ button[type="submit"]:disabled {
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .results-header h2 {
@@ -422,6 +424,13 @@ button[type="submit"]:disabled {
 .search-terms {
   font-size: 0.875rem;
   color: var(--text-tertiary);
+}
+
+.results-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 /* Result Card */

@@ -117,23 +117,22 @@
           <button class="claim-chip" type="button">Exercise improves cognitive function</button>
         </div>
 
-        <div class="utility-bar" hidden id="utility-bar">
-          <div class="utility-group">
-            <button class="ghost-btn" id="share-link-btn" type="button">Copy shareable search link</button>
-            <span class="ghost-hint" id="share-hint" hidden>Link copied</span>
-          </div>
-          <div class="utility-group">
-            <button class="ghost-btn" id="save-bundle-btn" type="button">Save these results</button>
-            <span class="ghost-hint" id="save-hint" hidden>Saved locally</span>
-          </div>
-        </div>
-
         <div id="results-section" hidden>
           <div class="results-header">
             <h2>Sources Found</h2>
             <p class="search-terms">
               Search terms: <span id="terms-used"></span>
             </p>
+            <div class="utility-bar" hidden id="utility-bar">
+              <div class="utility-group">
+                <button class="ghost-btn" id="share-link-btn" type="button">Copy shareable link</button>
+                <span class="ghost-hint" id="share-hint" hidden>Link copied</span>
+              </div>
+              <div class="utility-group">
+                <button class="ghost-btn" id="save-bundle-btn" type="button">Save these results</button>
+                <span class="ghost-hint" id="save-hint" hidden>Saved locally</span>
+              </div>
+            </div>
           </div>
           <div id="results-list"></div>
         </div>
