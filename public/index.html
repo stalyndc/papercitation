@@ -43,6 +43,7 @@
       href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&family=Sora:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="preconnect" href="https://papercitation-api.stalyn.workers.dev" />
   </head>
   <body>
     <div class="page-container">
@@ -126,11 +127,9 @@
             <div class="utility-bar" hidden id="utility-bar">
               <div class="utility-group">
                 <button class="ghost-btn" id="share-link-btn" type="button">Copy shareable link</button>
-                <span class="ghost-hint" id="share-hint" hidden>Link copied</span>
               </div>
               <div class="utility-group">
                 <button class="ghost-btn" id="save-bundle-btn" type="button">Save these results</button>
-                <span class="ghost-hint" id="save-hint" hidden>Saved locally</span>
               </div>
             </div>
           </div>
@@ -166,7 +165,7 @@
         </div>
         <p>
           Sources from
-          <a href="https://openalex.org" target="_blank" rel="noopener"
+          <a href="https://openalex.org" target="_blank" rel="noopener noreferrer"
             >OpenAlex</a
           >. Always verify citations before submitting.
         </p>
@@ -177,8 +176,8 @@
     <div id="live-region" class="sr-live" aria-live="polite" aria-atomic="true"></div>
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-VDkUfDvfHQwZ0pniS3pSke1Mt2rt7NmBGG99nmCaTKty+PBkO5OVwOB1p5MNDoAuCEi0aKBslZxW3QAtF5pP2w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="animations.js"></script>
-    <script src="app.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-VDkUfDvfHQwZ0pniS3pSke1Mt2rt7NmBGG99nmCaTKty+PBkO5OVwOB1p5MNDoAuCEi0aKBslZxW3QAtF5pP2w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script defer src="animations.js"></script>
+    <script defer src="app.js"></script>
   </body>
 </html>

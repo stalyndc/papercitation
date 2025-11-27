@@ -202,10 +202,10 @@ function createResultCard(paper, index) {
     <div class="result-actions">
       ${
         paper.url
-          ? `<a href="${escapeHtml(
-              paper.url
-            )}" target="_blank" rel="noopener" class="result-link">View Paper →</a>`
-          : ""
+        ? `<a href="${escapeHtml(
+            paper.url
+          )}" target="_blank" rel="noopener noreferrer" class="result-link">View Paper →</a>`
+        : ""
       }
       <button class="save-btn" type="button">Save citation</button>
     </div>

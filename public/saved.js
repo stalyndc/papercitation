@@ -155,9 +155,7 @@ function handleSetAction(btn) {
   }
 
   if (action === "open") {
-    const url = new URL(window.location.href);
-    url.pathname = url.pathname.replace(/saved\.html$/, "index.html");
-    url.search = "";
+    const url = new URL("/index.html", window.location.origin);
     url.searchParams.set("claim", bundle.claim);
     window.location.href = url.toString();
     return;
