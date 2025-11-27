@@ -307,8 +307,9 @@ button[type="submit"]:disabled {
 }
 
 .popular-label {
-  font-size: 0.875rem;
-  color: var(--text-tertiary);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 700;
   margin-bottom: 1rem;
 }
 
