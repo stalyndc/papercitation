@@ -1,20 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello, World!</title>
-  </head>
-  <body>
-    <h1 id="heading"></h1>
-    <script>
-      fetch("/message")
-        .then((resp) => resp.text())
-        .then((text) => {
-          const h1 = document.getElementById("heading");
-          h1.textContent = text;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper Citation - Cite anything in seconds</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#e6f7f8',
+              100: '#ccf0f2',
+              200: '#99e1e5',
+              300: '#66d2d8',
+              400: '#33c3cb',
+              500: '#00ADB5',
+              600: '#009ba3',
+              700: '#007a80',
+              800: '#00585c',
+              900: '#003739',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900 min-h-screen">
+  
+  <!-- Nav -->
+  <nav class="flex justify-between items-center px-6 py-4 max-w-4xl mx-auto">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
+        <span class="text-white font-bold text-sm">P</span>
+      </div>
+      <span class="font-semibold text-zinc-800">Paper Citation</span>
+    </div>
+    <div class="flex gap-6 text-sm text-zinc-500">
+      <a href="#" class="hover:text-brand-500 transition">Guides</a>
+      <a href="#" class="hover:text-brand-500 transition">Formats</a>
+      <a href="#" class="hover:text-brand-500 transition">About</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <main class="max-w-2xl mx-auto px-6 pt-20 pb-32">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-bold text-zinc-900 mb-4 tracking-tight">
+        Cite anything in seconds
+      </h1>
+      <p class="text-lg text-zinc-500">
+        Paste a URL, DOI, or ISBN. We'll do the rest.
+      </p>
+    </div>
+
+    <!-- Style Selector -->
+    <div class="flex justify-center gap-2 mb-6">
+      <button onclick="selectStyle('apa7')" id="btn-apa7" class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-brand-500 text-white">
+        APA 7
+      </button>
+      <button onclick="selectStyle('mla9')" id="btn-mla9" class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300">
+        MLA 9
+      </button>
+      <button onclick="selectStyle('chicago')" id="btn-chicago" class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300">
+        Chicago
+      </button>
+      <button onclick="selectStyle('harvard')" id="btn-harvard" class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300">
+        Harvard
+      </button>
+    </div>
+
+    <!-- Input -->
+    <div class="relative mb-8">
+      <input
+        type="text"
+        id="source-input"
+        placeholder="Paste a URL, DOI, ISBN, or article title..."
+        class="w-full px-5 py-4 text-base rounded-xl border-2 border-zinc-200 focus:border-brand-500 focus:outline-none shadow-sm transition bg-white"
+        onkeydown="if(event.key === 'Enter') generateCitation()"
+      >
+      <button
+        onclick="generateCitation()"
+        id="cite-btn"
+        class="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium transition text-sm"
+      >
+        Cite
+      </button>
+    </div>
+
+    <!-- Result -->
+    <div id="result" class="hidden">
+      <div class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-3 bg-zinc-50 border-b border-zinc-200 flex justify-between items-center">
+          <span id="result-style" class="text-sm font-medium text-zinc-700">APA 7 Format</span>
+          <button onclick="showAllFormats()" class="text-sm text-brand-500 hover:text-brand-600 font-medium">
+            Show all formats
+          </button>
+        </div>
+        <div class="p-5">
+          <p id="citation-text" class="text-zinc-800 leading-relaxed font-mono text-sm bg-zinc-50 p-4 rounded-lg break-words"></p>
+          <div class="flex gap-3 mt-4">
+            <button onclick="copyCitation()" class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-2.5 rounded-lg font-medium transition flex items-center justify-center gap-2 text-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+              </svg>
+              Copy Citation
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Formats Modal -->
+    <div id="all-formats" class="hidden">
+      <div class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden mt-4">
+        <div class="px-5 py-3 bg-zinc-50 border-b border-zinc-200">
+          <span class="text-sm font-medium text-zinc-700">All Formats</span>
+        </div>
+        <div class="p-5 space-y-4">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-medium text-zinc-500">APA 7</span>
+              <button onclick="copyFormat('apa7')" class="text-xs text-brand-500 hover:text-brand-600">Copy</button>
+            </div>
+            <p id="format-apa7" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-medium text-zinc-500">MLA 9</span>
+              <button onclick="copyFormat('mla9')" class="text-xs text-brand-500 hover:text-brand-600">Copy</button>
+            </div>
+            <p id="format-mla9" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-medium text-zinc-500">Chicago</span>
+              <button onclick="copyFormat('chicago')" class="text-xs text-brand-500 hover:text-brand-600">Copy</button>
+            </div>
+            <p id="format-chicago" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-medium text-zinc-500">Harvard</span>
+              <button onclick="copyFormat('harvard')" class="text-xs text-brand-500 hover:text-brand-600">Copy</button>
+            </div>
+            <p id="format-harvard" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="hidden text-center py-8">
+      <div class="inline-block w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-zinc-500 mt-3 text-sm">Generating citation...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="hidden">
+      <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+        <p id="error-text"></p>
+      </div>
+    </div>
+
+    <!-- Trust Signals -->
+    <div class="mt-16 text-center">
+      <p class="text-sm text-zinc-400 mb-6">Free forever. No login required.</p>
+      <div class="flex justify-center gap-8 text-zinc-400">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+          <span class="text-sm">Instant</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+          <span class="text-sm">Accurate</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span class="text-sm">100% Free</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-zinc-200 py-6 text-center text-sm text-zinc-400">
+    <p>Built for students. No ads, no BS.</p>
+  </footer>
+
+  <script>
+    let currentStyle = 'apa7';
+    let citations = {};
+
+    const styleLabels = {
+      apa7: 'APA 7',
+      mla9: 'MLA 9',
+      chicago: 'Chicago',
+      harvard: 'Harvard'
+    };
+
+    function selectStyle(style) {
+      currentStyle = style;
+      
+      // Update button styles
+      document.querySelectorAll('.style-btn').forEach(btn => {
+        btn.className = 'style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300';
+      });
+      document.getElementById(`btn-${style}`).className = 'style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-brand-500 text-white';
+      
+      // Update displayed citation if we have results
+      if (citations[style]) {
+        document.getElementById('citation-text').textContent = citations[style];
+        document.getElementById('result-style').textContent = `${styleLabels[style]} Format`;
+      }
+    }
+
+    async function generateCitation() {
+      const input = document.getElementById('source-input').value.trim();
+      if (!input) return;
+
+      // Hide previous results, show loading
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('all-formats').classList.add('hidden');
+      document.getElementById('error').classList.add('hidden');
+      document.getElementById('loading').classList.remove('hidden');
+
+      try {
+        const response = await fetch('/api/cite', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: input, style: currentStyle })
         });
-    </script>
-  </body>
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to generate citation');
+        }
+
+        // Store all citations
+        citations = data.citations;
+
+        // Display result
+        document.getElementById('citation-text').textContent = citations[currentStyle];
+        document.getElementById('result-style').textContent = `${styleLabels[currentStyle]} Format`;
+        
+        // Populate all formats
+        Object.keys(citations).forEach(style => {
+          const el = document.getElementById(`format-${style}`);
+          if (el) el.textContent = citations[style];
+        });
+
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('result').classList.remove('hidden');
+
+      } catch (err) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error-text').textContent = err.message;
+        document.getElementById('error').classList.remove('hidden');
+      }
+    }
+
+    function showAllFormats() {
+      document.getElementById('all-formats').classList.toggle('hidden');
+    }
+
+    function copyCitation() {
+      const text = document.getElementById('citation-text').textContent;
+      navigator.clipboard.writeText(text);
+      
+      // Brief feedback
+      const btn = event.target.closest('button');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Copied!';
+      setTimeout(() => btn.innerHTML = originalText, 1500);
+    }
+
+    function copyFormat(style) {
+      const text = document.getElementById(`format-${style}`).textContent;
+      navigator.clipboard.writeText(text);
+    }
+  </script>
+</body>
 </html>
