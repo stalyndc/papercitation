@@ -37,8 +37,27 @@
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
-    .citation-text i {
-      font-style: italic;
+    .citation-text i { font-style: italic; }
+    .search-results {
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    .search-result-item:hover {
+      background-color: #f3f4f6;
+    }
+    .search-result-item.selected {
+      background-color: #E84545;
+      color: white;
+    }
+    .search-result-item.selected .text-zinc-500 {
+      color: rgba(255,255,255,0.8);
+    }
+    .type-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -66,7 +85,7 @@
         Cite anything in seconds
       </h1>
       <p class="text-lg text-zinc-500">
-        Paste a URL, DOI, or ISBN. We'll do the rest.
+        Paste a URL, DOI, ISBN, or search for a book or article.
       </p>
     </div>
 
@@ -91,9 +110,11 @@
       <input
         type="text"
         id="source-input"
-        placeholder="Paste a URL, DOI, ISBN, or article title..."
+        placeholder="Paste a URL, DOI, ISBN, or search for a title..."
         class="w-full px-5 py-4 pr-32 text-base rounded-xl border-2 border-zinc-200 focus:border-brand-500 focus:outline-none shadow-sm transition bg-white"
-        onkeydown="if(event.key === 'Enter') generateCitation()"
+        onkeydown="handleKeyDown(event)"
+        oninput="handleInput()"
+        autocomplete="off"
       >
       <div class="absolute right-2 top-1/2 -translate-y-1/2 flex gap-2">
         <button
@@ -104,12 +125,34 @@
           Clear
         </button>
         <button
-          onclick="generateCitation()"
+          onclick="handleCiteClick()"
           id="cite-btn"
           class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium transition text-sm"
         >
           Cite
         </button>
+      </div>
+
+      <!-- Search Results Dropdown -->
+      <div id="search-dropdown" class="hidden absolute left-0 right-0 top-full mt-2 bg-white rounded-xl border border-zinc-200 shadow-lg z-50 overflow-hidden">
+        <div class="px-4 py-3 bg-zinc-50 border-b border-zinc-200 flex justify-between items-center">
+          <span class="text-sm font-medium text-zinc-700">Select a source</span>
+          <button onclick="closeDropdown()" class="text-zinc-400 hover:text-zinc-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div id="search-results" class="search-results">
+          <!-- Results populated here -->
+        </div>
+        <div id="search-loading" class="hidden px-4 py-8 text-center">
+          <div class="inline-block w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-zinc-500 mt-2 text-sm">Searching...</p>
+        </div>
+        <div id="search-empty" class="hidden px-4 py-8 text-center text-zinc-500 text-sm">
+          No results found. Try a different search term.
+        </div>
       </div>
     </div>
 
@@ -136,7 +179,7 @@
       </div>
     </div>
 
-    <!-- All Formats Modal -->
+    <!-- All Formats -->
     <div id="all-formats" class="hidden">
       <div class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden mt-4">
         <div class="px-5 py-3 bg-zinc-50 border-b border-zinc-200">
@@ -223,6 +266,9 @@
     let currentStyle = 'apa7';
     let citations = {};
     let allFormatsVisible = false;
+    let searchResults = [];
+    let selectedIndex = -1;
+    let searchTimeout = null;
 
     const styleLabels = {
       apa7: 'APA 7',
@@ -231,54 +277,220 @@
       harvard: 'Harvard'
     };
 
-    // Show/hide clear button based on input
     const sourceInput = document.getElementById('source-input');
     const clearBtn = document.getElementById('clear-btn');
-    
-    sourceInput.addEventListener('input', () => {
-      if (sourceInput.value.trim()) {
+    const searchDropdown = document.getElementById('search-dropdown');
+
+    // Detect if input is a direct source (URL, DOI, ISBN) or needs search
+    function isDirectSource(input) {
+      const s = input.trim().toLowerCase();
+      
+      // DOI
+      if (s.startsWith('10.') || s.includes('doi.org/')) return true;
+      
+      // ISBN
+      const isbnClean = input.replace(/[-\s]/g, '');
+      if (/^(\d{10}|\d{13})$/.test(isbnClean)) return true;
+      
+      // URL
+      if (s.startsWith('http://') || s.startsWith('https://')) return true;
+      
+      return false;
+    }
+
+    // Handle input changes
+    function handleInput() {
+      const input = sourceInput.value.trim();
+      
+      // Show/hide clear button
+      if (input) {
         clearBtn.classList.remove('hidden');
       } else {
         clearBtn.classList.add('hidden');
+        closeDropdown();
+        return;
       }
-    });
 
-    function clearForm() {
-      sourceInput.value = '';
-      clearBtn.classList.add('hidden');
+      // If it's a direct source, don't show search
+      if (isDirectSource(input)) {
+        closeDropdown();
+        return;
+      }
+
+      // Debounce search
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        if (input.length >= 3) {
+          performSearch(input);
+        }
+      }, 300);
+    }
+
+    // Handle keyboard navigation
+    function handleKeyDown(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        
+        // If dropdown is open and item selected, use that
+        if (!searchDropdown.classList.contains('hidden') && selectedIndex >= 0) {
+          selectSearchResult(searchResults[selectedIndex]);
+        } else {
+          handleCiteClick();
+        }
+      } else if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        if (!searchDropdown.classList.contains('hidden') && searchResults.length > 0) {
+          selectedIndex = Math.min(selectedIndex + 1, searchResults.length - 1);
+          updateSelectedResult();
+        }
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (!searchDropdown.classList.contains('hidden') && searchResults.length > 0) {
+          selectedIndex = Math.max(selectedIndex - 1, 0);
+          updateSelectedResult();
+        }
+      } else if (event.key === 'Escape') {
+        closeDropdown();
+      }
+    }
+
+    // Perform search
+    async function performSearch(query) {
+      const resultsContainer = document.getElementById('search-results');
+      const loadingEl = document.getElementById('search-loading');
+      const emptyEl = document.getElementById('search-empty');
+
+      // Show dropdown with loading
+      searchDropdown.classList.remove('hidden');
+      resultsContainer.innerHTML = '';
+      resultsContainer.classList.add('hidden');
+      emptyEl.classList.add('hidden');
+      loadingEl.classList.remove('hidden');
+
+      try {
+        const response = await fetch('/api/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        });
+
+        const data = await response.json();
+        searchResults = data.results || [];
+        selectedIndex = -1;
+
+        loadingEl.classList.add('hidden');
+
+        if (searchResults.length === 0) {
+          emptyEl.classList.remove('hidden');
+        } else {
+          resultsContainer.classList.remove('hidden');
+          renderSearchResults();
+        }
+      } catch (err) {
+        console.error('Search error:', err);
+        loadingEl.classList.add('hidden');
+        emptyEl.textContent = 'Search failed. Please try again.';
+        emptyEl.classList.remove('hidden');
+      }
+    }
+
+    // Render search results
+    function renderSearchResults() {
+      const container = document.getElementById('search-results');
+      container.innerHTML = searchResults.map((result, index) => `
+        <div 
+          class="search-result-item px-4 py-3 cursor-pointer border-b border-zinc-100 last:border-0 ${index === selectedIndex ? 'selected' : ''}"
+          onclick="selectSearchResult(searchResults[${index}])"
+          onmouseenter="selectedIndex = ${index}; updateSelectedResult()"
+        >
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="font-medium text-sm truncate">${escapeHtml(result.title)}</div>
+              <div class="text-xs text-zinc-500 mt-1">
+                ${result.authors.length > 0 ? escapeHtml(result.authors.slice(0, 2).join(', ')) + (result.authors.length > 2 ? ' et al.' : '') : 'Unknown author'}
+                ${result.year ? ' · ' + result.year : ''}
+                ${result.publisher ? ' · ' + escapeHtml(result.publisher) : ''}
+              </div>
+            </div>
+            <span class="type-badge bg-zinc-100 text-zinc-600 flex-shrink-0">${result.type}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Update selected result highlighting
+    function updateSelectedResult() {
+      const items = document.querySelectorAll('.search-result-item');
+      items.forEach((item, index) => {
+        if (index === selectedIndex) {
+          item.classList.add('selected');
+        } else {
+          item.classList.remove('selected');
+        }
+      });
+    }
+
+    // Select a search result and generate citation
+    async function selectSearchResult(result) {
+      closeDropdown();
+      sourceInput.value = result.title;
+
+      // Show loading
       document.getElementById('result').classList.add('hidden');
       document.getElementById('all-formats').classList.add('hidden');
       document.getElementById('error').classList.add('hidden');
+      document.getElementById('loading').classList.remove('hidden');
       allFormatsVisible = false;
       document.getElementById('toggle-formats-btn').textContent = 'Show all formats';
-      citations = {};
-      sourceInput.focus();
-    }
 
-    function selectStyle(style) {
-      currentStyle = style;
-      
-      // Update button styles
-      document.querySelectorAll('.style-btn').forEach(btn => {
-        btn.className = 'style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300';
-      });
-      document.getElementById(`btn-${style}`).className = 'style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-brand-500 text-white';
-      
-      // Update displayed citation if we have results
-      if (citations[style]) {
-        document.getElementById('citation-text').innerHTML = citations[style];
-        document.getElementById('result-style').textContent = `${styleLabels[style]} Format`;
+      try {
+        const response = await fetch('/api/cite/selected', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ result })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to generate citation');
+        }
+
+        citations = data.citations;
+        displayCitations();
+      } catch (err) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error-text').textContent = err.message;
+        document.getElementById('error').classList.remove('hidden');
       }
     }
 
-    async function generateCitation() {
-      const input = document.getElementById('source-input').value.trim();
+    // Handle cite button click
+    async function handleCiteClick() {
+      const input = sourceInput.value.trim();
       if (!input) return;
 
-      // Show clear button
-      clearBtn.classList.remove('hidden');
+      // If dropdown is showing results, don't proceed without selection
+      if (!searchDropdown.classList.contains('hidden') && searchResults.length > 0) {
+        // If something selected, use it
+        if (selectedIndex >= 0) {
+          selectSearchResult(searchResults[selectedIndex]);
+        } else {
+          // Auto-select first result
+          selectSearchResult(searchResults[0]);
+        }
+        return;
+      }
 
-      // Hide previous results, show loading
+      // If it's a text query, trigger search
+      if (!isDirectSource(input)) {
+        performSearch(input);
+        return;
+      }
+
+      // Direct source - generate citation immediately
+      closeDropdown();
+      
       document.getElementById('result').classList.add('hidden');
       document.getElementById('all-formats').classList.add('hidden');
       document.getElementById('error').classList.add('hidden');
@@ -290,31 +502,23 @@
         const response = await fetch('/api/cite', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ source: input, style: currentStyle })
+          body: JSON.stringify({ source: input })
         });
 
         const data = await response.json();
+
+        if (data.needsSearch) {
+          document.getElementById('loading').classList.add('hidden');
+          performSearch(input);
+          return;
+        }
 
         if (!response.ok) {
           throw new Error(data.error || 'Failed to generate citation');
         }
 
-        // Store all citations
         citations = data.citations;
-
-        // Display result (using innerHTML to render italic tags)
-        document.getElementById('citation-text').innerHTML = citations[currentStyle];
-        document.getElementById('result-style').textContent = `${styleLabels[currentStyle]} Format`;
-        
-        // Populate all formats
-        Object.keys(citations).forEach(style => {
-          const el = document.getElementById(`format-${style}`);
-          if (el) el.innerHTML = citations[style];
-        });
-
-        document.getElementById('loading').classList.add('hidden');
-        document.getElementById('result').classList.remove('hidden');
-
+        displayCitations();
       } catch (err) {
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('error-text').textContent = err.message;
@@ -322,12 +526,70 @@
       }
     }
 
+    // Display citations
+    function displayCitations() {
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('citation-text').innerHTML = citations[currentStyle];
+      document.getElementById('result-style').textContent = `${styleLabels[currentStyle]} Format`;
+
+      Object.keys(citations).forEach(style => {
+        const el = document.getElementById(`format-${style}`);
+        if (el) el.innerHTML = citations[style];
+      });
+
+      document.getElementById('result').classList.remove('hidden');
+    }
+
+    // Close dropdown
+    function closeDropdown() {
+      searchDropdown.classList.add('hidden');
+      searchResults = [];
+      selectedIndex = -1;
+    }
+
+    // Escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Clear form
+    function clearForm() {
+      sourceInput.value = '';
+      clearBtn.classList.add('hidden');
+      closeDropdown();
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('all-formats').classList.add('hidden');
+      document.getElementById('error').classList.add('hidden');
+      allFormatsVisible = false;
+      document.getElementById('toggle-formats-btn').textContent = 'Show all formats';
+      citations = {};
+      sourceInput.focus();
+    }
+
+    // Select citation style
+    function selectStyle(style) {
+      currentStyle = style;
+
+      document.querySelectorAll('.style-btn').forEach(btn => {
+        btn.className = 'style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300';
+      });
+      document.getElementById(`btn-${style}`).className = 'style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-brand-500 text-white';
+
+      if (citations[style]) {
+        document.getElementById('citation-text').innerHTML = citations[style];
+        document.getElementById('result-style').textContent = `${styleLabels[style]} Format`;
+      }
+    }
+
+    // Show all formats
     function showAllFormats() {
       const allFormats = document.getElementById('all-formats');
       const toggleBtn = document.getElementById('toggle-formats-btn');
-      
+
       allFormatsVisible = !allFormatsVisible;
-      
+
       if (allFormatsVisible) {
         allFormats.classList.remove('hidden');
         toggleBtn.textContent = 'Hide all formats';
@@ -337,25 +599,25 @@
       }
     }
 
-    // Get plain text from HTML (strips italic tags for clipboard)
+    // Get plain text from HTML
     function getPlainText(html) {
       const temp = document.createElement('div');
       temp.innerHTML = html;
       return temp.textContent || temp.innerText || '';
     }
 
+    // Copy citation
     function copyCitation() {
       const html = citations[currentStyle];
       const text = getPlainText(html);
       navigator.clipboard.writeText(text);
-      
-      // Brief feedback
+
       const btn = document.getElementById('copy-main-btn');
       const originalHTML = btn.innerHTML;
       btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Copied!</span>';
       btn.classList.remove('bg-brand-500', 'hover:bg-brand-600');
       btn.classList.add('bg-green-500');
-      
+
       setTimeout(() => {
         btn.innerHTML = originalHTML;
         btn.classList.remove('bg-green-500');
@@ -363,23 +625,30 @@
       }, 1500);
     }
 
+    // Copy specific format
     function copyFormat(style, buttonEl) {
       const html = citations[style];
       const text = getPlainText(html);
       navigator.clipboard.writeText(text);
-      
-      // Brief feedback
+
       const originalText = buttonEl.textContent;
       buttonEl.textContent = 'Copied!';
       buttonEl.classList.remove('text-brand-500', 'hover:text-brand-600');
       buttonEl.classList.add('text-green-500');
-      
+
       setTimeout(() => {
         buttonEl.textContent = originalText;
         buttonEl.classList.remove('text-green-500');
         buttonEl.classList.add('text-brand-500', 'hover:text-brand-600');
       }, 1500);
     }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!searchDropdown.contains(e.target) && e.target !== sourceInput) {
+        closeDropdown();
+      }
+    });
   </script>
 </body>
 </html>
