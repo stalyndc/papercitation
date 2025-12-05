@@ -1,9 +1,9 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 
-import { SearchResult, SourceMetadata } from "./types";
-import { detectInputType } from "./detect";
-import { formatAllCitations } from "./formatters";
+import { SearchResult, SourceMetadata } from "./lib/types";
+import { detectInputType } from "./lib/detect";
+import { formatAllCitations } from "./lib/formatters";
 import {
   searchAll,
   metadataFromSearchResult,
@@ -12,7 +12,7 @@ import {
   fetchYouTubeMetadata,
   fetchWikipediaMetadata,
   fetchURLMetadata,
-} from "./fetchers";
+} from "./lib/fetchers";
 
 type Bindings = {
   GEMINI_API_KEY: string;
