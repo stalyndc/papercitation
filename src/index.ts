@@ -72,9 +72,53 @@ app.post("/api/cite/selected", async (c) => {
     metadata.accessDate = today;
 
     const citations = formatAllCitations(metadata, todayShort);
-    return c.json({ citations });
+    return c.json({ citations, metadata });
   } catch (error) {
     console.error("Cite selected error:", error);
+    return c.json({ error: "Failed to generate citation" }, 500);
+  }
+});
+
+// ============ MANUAL CITE (For edited metadata) ============
+
+app.post("/api/cite/manual", async (c) => {
+  try {
+    const { metadata } = await c.req.json();
+
+    if (!metadata) {
+      return c.json({ error: "No metadata provided" }, 400);
+    }
+
+    const today = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    const todayShort = new Date().toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+
+    // Ensure required fields
+    const fullMetadata: SourceMetadata = {
+      authors: metadata.authors || [],
+      title: metadata.title || "Untitled",
+      siteName: metadata.siteName || metadata.publisher || "",
+      publisher: metadata.publisher || metadata.siteName || "",
+      year: metadata.year || undefined,
+      month: metadata.month || undefined,
+      day: metadata.day || undefined,
+      url: metadata.url || "",
+      accessDate: today,
+      type: metadata.type || "website",
+    };
+
+    const citations = formatAllCitations(fullMetadata, todayShort);
+    return c.json({ citations });
+  } catch (error) {
+    console.error("Manual cite error:", error);
     return c.json({ error: "Failed to generate citation" }, 500);
   }
 });
@@ -134,7 +178,7 @@ app.post("/api/cite", async (c) => {
 
     metadata.accessDate = today;
     const citations = formatAllCitations(metadata, todayShort);
-    return c.json({ citations });
+    return c.json({ citations, metadata });
   } catch (error) {
     console.error("Citation error:", error);
     return c.json({ error: "Failed to generate citation" }, 500);

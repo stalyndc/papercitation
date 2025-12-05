@@ -1,860 +1,1008 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Paper Citation - Cite anything in seconds</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400;1,500&display=swap"
-      rel="stylesheet"
-    />
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ["Inter", "system-ui", "sans-serif"],
-              mono: ["JetBrains Mono", "monospace"],
-            },
-            colors: {
-              brand: {
-                50: "#fef2f2",
-                100: "#fee2e2",
-                200: "#fecaca",
-                300: "#fca5a5",
-                400: "#f87171",
-                500: "#E84545",
-                600: "#dc2626",
-                700: "#b91c1c",
-                800: "#991b1b",
-                900: "#7f1d1d",
-              },
-            },
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper Citation - Cite anything in seconds</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
           },
-        },
-      };
-    </script>
-    <style>
-      body {
-        font-family: "Inter", system-ui, sans-serif;
+          colors: {
+            brand: {
+              50: '#fef2f2',
+              100: '#fee2e2',
+              200: '#fecaca',
+              300: '#fca5a5',
+              400: '#f87171',
+              500: '#E84545',
+              600: '#dc2626',
+              700: '#b91c1c',
+              800: '#991b1b',
+              900: '#7f1d1d',
+            }
+          }
+        }
       }
-      .font-mono {
-        font-family: "JetBrains Mono", monospace;
-      }
-      .citation-text i {
-        font-style: italic;
-      }
-      .search-results {
-        max-height: 320px;
-        overflow-y: auto;
-      }
-      .search-result-item:hover {
-        background-color: #f3f4f6;
-      }
-      .search-result-item.selected {
-        background-color: #e84545;
-        color: white;
-      }
-      .search-result-item.selected .text-zinc-500 {
-        color: rgba(255, 255, 255, 0.8);
-      }
-      .type-badge {
-        font-size: 10px;
-        padding: 2px 6px;
-        border-radius: 4px;
-        text-transform: uppercase;
-        font-weight: 600;
-      }
-    </style>
-
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-PXQQVNJGH7"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-PXQQVNJGH7");
-    </script>
-  </head>
-  <body class="bg-zinc-50 text-zinc-900 min-h-screen">
-    <!-- Nav -->
-    <nav class="flex justify-between items-center px-6 py-4 max-w-4xl mx-auto">
-      <a href="/" class="flex items-center gap-2 hover:opacity-80 transition">
-        <div
-          class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center"
-        >
-          <span class="text-white font-bold text-sm">P</span>
-        </div>
-        <span class="font-semibold text-zinc-800">Paper Citation</span>
-      </a>
-      <div class="flex gap-6 text-sm text-zinc-500">
-        <a href="#" class="hover:text-brand-500 transition">Guides</a>
-        <a href="#" class="hover:text-brand-500 transition">Formats</a>
-        <a href="#" class="hover:text-brand-500 transition">About</a>
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .citation-text i { font-style: italic; }
+    .search-results {
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    .search-result-item:hover {
+      background-color: #f3f4f6;
+    }
+    .search-result-item.selected {
+      background-color: #E84545;
+      color: white;
+    }
+    .search-result-item.selected .text-zinc-500 {
+      color: rgba(255,255,255,0.8);
+    }
+    .type-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900 min-h-screen">
+  
+  <!-- Nav -->
+  <nav class="flex justify-between items-center px-6 py-4 max-w-4xl mx-auto">
+    <a href="/" class="flex items-center gap-2 hover:opacity-80 transition">
+      <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
+        <span class="text-white font-bold text-sm">P</span>
       </div>
-    </nav>
+      <span class="font-semibold text-zinc-800">Paper Citation</span>
+    </a>
+    <div class="flex gap-6 text-sm text-zinc-500">
+      <a href="#" class="hover:text-brand-500 transition">Guides</a>
+      <a href="#" class="hover:text-brand-500 transition">Formats</a>
+      <a href="#" class="hover:text-brand-500 transition">About</a>
+    </div>
+  </nav>
 
-    <!-- Hero -->
-    <main class="max-w-2xl mx-auto px-6 pt-20 pb-32">
-      <div class="text-center mb-10">
-        <h1 class="text-4xl font-bold text-zinc-900 mb-4 tracking-tight">
-          Cite anything in seconds
-        </h1>
-        <p class="text-lg text-zinc-500">
-          Paste a URL, DOI, ISBN, or search for a book or article.
-        </p>
+  <!-- Hero -->
+  <main class="max-w-2xl mx-auto px-6 pt-20 pb-32">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-bold text-zinc-900 mb-4 tracking-tight">
+        Cite anything in seconds
+      </h1>
+      <p class="text-lg text-zinc-500">
+        Paste a URL, DOI, ISBN, or search for a book or article.
+      </p>
+    </div>
+
+    <!-- Style Selector -->
+    <div class="flex justify-center gap-2 mb-6">
+      <button onclick="selectStyle('apa7')" id="btn-apa7" class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-brand-500 text-white">
+        APA 7
+      </button>
+      <button onclick="selectStyle('mla9')" id="btn-mla9" class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300">
+        MLA 9
+      </button>
+      <button onclick="selectStyle('chicago')" id="btn-chicago" class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300">
+        Chicago
+      </button>
+      <button onclick="selectStyle('harvard')" id="btn-harvard" class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300">
+        Harvard
+      </button>
+    </div>
+
+    <!-- Input -->
+    <div class="relative mb-8">
+      <input
+        type="text"
+        id="source-input"
+        placeholder="Paste a URL, DOI, ISBN, or search for a title..."
+        class="w-full px-5 py-4 pr-32 text-base rounded-xl border-2 border-zinc-200 focus:border-brand-500 focus:outline-none shadow-sm transition bg-white"
+        onkeydown="handleKeyDown(event)"
+        oninput="handleInput()"
+        autocomplete="off"
+      >
+      <div class="absolute right-2 top-1/2 -translate-y-1/2 flex gap-2">
+        <button
+          onclick="clearForm()"
+          id="clear-btn"
+          class="hidden bg-zinc-100 hover:bg-zinc-200 text-zinc-600 px-3 py-2.5 rounded-lg font-medium transition text-sm"
+        >
+          Clear
+        </button>
+        <button
+          onclick="handleCiteClick()"
+          id="cite-btn"
+          class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium transition text-sm"
+        >
+          Cite
+        </button>
       </div>
 
-      <!-- Style Selector -->
-      <div class="flex justify-center gap-2 mb-6">
-        <button
-          onclick="selectStyle('apa7')"
-          id="btn-apa7"
-          class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-brand-500 text-white"
-        >
-          APA 7
-        </button>
-        <button
-          onclick="selectStyle('mla9')"
-          id="btn-mla9"
-          class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300"
-        >
-          MLA 9
-        </button>
-        <button
-          onclick="selectStyle('chicago')"
-          id="btn-chicago"
-          class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300"
-        >
-          Chicago
-        </button>
-        <button
-          onclick="selectStyle('harvard')"
-          id="btn-harvard"
-          class="style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300"
-        >
-          Harvard
-        </button>
-      </div>
-
-      <!-- Input -->
-      <div class="relative mb-8">
-        <input
-          type="text"
-          id="source-input"
-          placeholder="Paste a URL, DOI, ISBN, or search for a title..."
-          class="w-full px-5 py-4 pr-32 text-base rounded-xl border-2 border-zinc-200 focus:border-brand-500 focus:outline-none shadow-sm transition bg-white"
-          onkeydown="handleKeyDown(event)"
-          oninput="handleInput()"
-          autocomplete="off"
-        />
-        <div class="absolute right-2 top-1/2 -translate-y-1/2 flex gap-2">
-          <button
-            onclick="clearForm()"
-            id="clear-btn"
-            class="hidden bg-zinc-100 hover:bg-zinc-200 text-zinc-600 px-3 py-2.5 rounded-lg font-medium transition text-sm"
-          >
-            Clear
-          </button>
-          <button
-            onclick="handleCiteClick()"
-            id="cite-btn"
-            class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium transition text-sm"
-          >
-            Cite
+      <!-- Search Results Dropdown -->
+      <div id="search-dropdown" class="hidden absolute left-0 right-0 top-full mt-2 bg-white rounded-xl border border-zinc-200 shadow-lg z-50 overflow-hidden">
+        <div class="px-4 py-3 bg-zinc-50 border-b border-zinc-200 flex justify-between items-center">
+          <span class="text-sm font-medium text-zinc-700">Select a source</span>
+          <button onclick="closeDropdown()" class="text-zinc-400 hover:text-zinc-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
           </button>
         </div>
+        <div id="search-results" class="search-results">
+          <!-- Results populated here -->
+        </div>
+        <div id="search-loading" class="hidden px-4 py-8 text-center">
+          <div class="inline-block w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-zinc-500 mt-2 text-sm">Searching...</p>
+        </div>
+        <div id="search-empty" class="hidden px-4 py-8 text-center text-zinc-500 text-sm">
+          No results found. Try a different search term.
+        </div>
+      </div>
+    </div>
 
-        <!-- Search Results Dropdown -->
-        <div
-          id="search-dropdown"
-          class="hidden absolute left-0 right-0 top-full mt-2 bg-white rounded-xl border border-zinc-200 shadow-lg z-50 overflow-hidden"
-        >
-          <div
-            class="px-4 py-3 bg-zinc-50 border-b border-zinc-200 flex justify-between items-center"
-          >
-            <span class="text-sm font-medium text-zinc-700"
-              >Select a source</span
-            >
-            <button
-              onclick="closeDropdown()"
-              class="text-zinc-400 hover:text-zinc-600"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                ></path>
+    <!-- Result -->
+    <div id="result" class="hidden">
+      <div class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-3 bg-zinc-50 border-b border-zinc-200 flex justify-between items-center">
+          <span id="result-style" class="text-sm font-medium text-zinc-700">APA 7 Format</span>
+          <div class="flex gap-3">
+            <button onclick="openEditModal()" class="text-sm text-brand-500 hover:text-brand-600 font-medium flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
               </svg>
+              Edit
             </button>
-          </div>
-          <div id="search-results" class="search-results">
-            <!-- Results populated here -->
-          </div>
-          <div id="search-loading" class="hidden px-4 py-8 text-center">
-            <div
-              class="inline-block w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"
-            ></div>
-            <p class="text-zinc-500 mt-2 text-sm">Searching...</p>
-          </div>
-          <div
-            id="search-empty"
-            class="hidden px-4 py-8 text-center text-zinc-500 text-sm"
-          >
-            No results found. Try a different search term.
-          </div>
-        </div>
-      </div>
-
-      <!-- Result -->
-      <div id="result" class="hidden">
-        <div
-          class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden"
-        >
-          <div
-            class="px-5 py-3 bg-zinc-50 border-b border-zinc-200 flex justify-between items-center"
-          >
-            <span id="result-style" class="text-sm font-medium text-zinc-700"
-              >APA 7 Format</span
-            >
-            <button
-              onclick="showAllFormats()"
-              id="toggle-formats-btn"
-              class="text-sm text-brand-500 hover:text-brand-600 font-medium"
-            >
+            <button onclick="showAllFormats()" id="toggle-formats-btn" class="text-sm text-brand-500 hover:text-brand-600 font-medium">
               Show all formats
             </button>
           </div>
-          <div class="p-5">
-            <p
-              id="citation-text"
-              class="citation-text text-zinc-800 leading-relaxed font-mono text-sm bg-zinc-50 p-4 rounded-lg break-words"
-            ></p>
-            <div class="flex gap-3 mt-4">
-              <button
-                onclick="copyCitation()"
-                id="copy-main-btn"
-                class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-2.5 rounded-lg font-medium transition flex items-center justify-center gap-2 text-sm"
-              >
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-                  ></path>
-                </svg>
-                <span>Copy Citation</span>
-              </button>
+        </div>
+        <div class="p-5">
+          <p id="citation-text" class="citation-text text-zinc-800 leading-relaxed font-mono text-sm bg-zinc-50 p-4 rounded-lg break-words"></p>
+          
+          <!-- Quick Date Edit -->
+          <div class="mt-4 p-4 bg-zinc-50 rounded-lg border border-zinc-200">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-medium text-zinc-500 uppercase tracking-wide">Quick Date Edit</span>
             </div>
+            <div class="flex gap-3">
+              <div class="flex-1">
+                <label class="block text-xs text-zinc-500 mb-1">Year</label>
+                <input type="text" id="quick-year" placeholder="2024" maxlength="4" 
+                  class="w-full px-3 py-2 text-sm rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none"
+                  onchange="updateFromQuickEdit()">
+              </div>
+              <div class="flex-1">
+                <label class="block text-xs text-zinc-500 mb-1">Month</label>
+                <select id="quick-month" class="w-full px-3 py-2 text-sm rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none"
+                  onchange="updateFromQuickEdit()">
+                  <option value="">--</option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
+              </div>
+              <div class="w-20">
+                <label class="block text-xs text-zinc-500 mb-1">Day</label>
+                <input type="text" id="quick-day" placeholder="15" maxlength="2"
+                  class="w-full px-3 py-2 text-sm rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none"
+                  onchange="updateFromQuickEdit()">
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3 mt-4">
+            <button onclick="copyCitation()" id="copy-main-btn" class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-2.5 rounded-lg font-medium transition flex items-center justify-center gap-2 text-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+              </svg>
+              <span>Copy Citation</span>
+            </button>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- All Formats -->
-      <div id="all-formats" class="hidden">
-        <div
-          class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden mt-4"
-        >
-          <div class="px-5 py-3 bg-zinc-50 border-b border-zinc-200">
-            <span class="text-sm font-medium text-zinc-700">All Formats</span>
-          </div>
-          <div class="p-5 space-y-4">
-            <div>
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-xs font-medium text-zinc-500">APA 7</span>
-                <button
-                  onclick="copyFormat('apa7', this)"
-                  class="text-xs text-brand-500 hover:text-brand-600 font-medium"
-                >
-                  Copy
-                </button>
-              </div>
-              <p
-                id="format-apa7"
-                class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"
-              ></p>
-            </div>
-            <div>
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-xs font-medium text-zinc-500">MLA 9</span>
-                <button
-                  onclick="copyFormat('mla9', this)"
-                  class="text-xs text-brand-500 hover:text-brand-600 font-medium"
-                >
-                  Copy
-                </button>
-              </div>
-              <p
-                id="format-mla9"
-                class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"
-              ></p>
-            </div>
-            <div>
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-xs font-medium text-zinc-500">Chicago</span>
-                <button
-                  onclick="copyFormat('chicago', this)"
-                  class="text-xs text-brand-500 hover:text-brand-600 font-medium"
-                >
-                  Copy
-                </button>
-              </div>
-              <p
-                id="format-chicago"
-                class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"
-              ></p>
-            </div>
-            <div>
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-xs font-medium text-zinc-500">Harvard</span>
-                <button
-                  onclick="copyFormat('harvard', this)"
-                  class="text-xs text-brand-500 hover:text-brand-600 font-medium"
-                >
-                  Copy
-                </button>
-              </div>
-              <p
-                id="format-harvard"
-                class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"
-              ></p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Loading State -->
-      <div id="loading" class="hidden text-center py-8">
-        <div
-          class="inline-block w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"
-        ></div>
-        <p class="text-zinc-500 mt-3 text-sm">Generating citation...</p>
-      </div>
-
-      <!-- Error State -->
-      <div id="error" class="hidden">
-        <div
-          class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm"
-        >
-          <p id="error-text"></p>
-        </div>
-      </div>
-
-      <!-- Trust Signals -->
-      <div class="mt-16 text-center">
-        <p class="text-sm text-zinc-400 mb-6">
-          Free forever. No login required.
-        </p>
-        <div class="flex justify-center gap-8 text-zinc-400">
-          <div class="flex items-center gap-2">
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              ></path>
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div class="px-6 py-4 border-b border-zinc-200 flex justify-between items-center sticky top-0 bg-white">
+          <h3 class="text-lg font-semibold text-zinc-900">Edit Citation Details</h3>
+          <button onclick="closeEditModal()" class="text-zinc-400 hover:text-zinc-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
-            <span class="text-sm">Instant</span>
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <!-- Authors -->
+          <div>
+            <label class="block text-sm font-medium text-zinc-700 mb-1">Author(s)</label>
+            <input type="text" id="edit-authors" placeholder="Last, First or Organization Name"
+              class="w-full px-4 py-2.5 rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none">
+            <p class="text-xs text-zinc-400 mt-1">Separate multiple authors with semicolons (;)</p>
           </div>
-          <div class="flex items-center gap-2">
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-              ></path>
-            </svg>
-            <span class="text-sm">Accurate</span>
+          
+          <!-- Title -->
+          <div>
+            <label class="block text-sm font-medium text-zinc-700 mb-1">Title</label>
+            <input type="text" id="edit-title"
+              class="w-full px-4 py-2.5 rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none">
           </div>
-          <div class="flex items-center gap-2">
-            <svg
-              class="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
-            </svg>
-            <span class="text-sm">100% Free</span>
+          
+          <!-- Date Row -->
+          <div>
+            <label class="block text-sm font-medium text-zinc-700 mb-1">Publication Date</label>
+            <div class="flex gap-3">
+              <div class="flex-1">
+                <input type="text" id="edit-year" placeholder="Year" maxlength="4"
+                  class="w-full px-4 py-2.5 rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none">
+              </div>
+              <div class="flex-1">
+                <select id="edit-month" class="w-full px-4 py-2.5 rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none">
+                  <option value="">Month</option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
+              </div>
+              <div class="w-24">
+                <input type="text" id="edit-day" placeholder="Day" maxlength="2"
+                  class="w-full px-4 py-2.5 rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Publisher / Site Name -->
+          <div>
+            <label class="block text-sm font-medium text-zinc-700 mb-1">Publisher / Website Name</label>
+            <input type="text" id="edit-publisher"
+              class="w-full px-4 py-2.5 rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none">
+          </div>
+          
+          <!-- URL -->
+          <div>
+            <label class="block text-sm font-medium text-zinc-700 mb-1">URL</label>
+            <input type="text" id="edit-url"
+              class="w-full px-4 py-2.5 rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none">
+          </div>
+          
+          <!-- Source Type -->
+          <div>
+            <label class="block text-sm font-medium text-zinc-700 mb-1">Source Type</label>
+            <select id="edit-type" class="w-full px-4 py-2.5 rounded-lg border border-zinc-200 focus:border-brand-500 focus:outline-none">
+              <option value="website">Website</option>
+              <option value="book">Book</option>
+              <option value="article">Journal Article</option>
+              <option value="video">Video</option>
+              <option value="encyclopedia">Encyclopedia</option>
+            </select>
+          </div>
+        </div>
+        <div class="px-6 py-4 border-t border-zinc-200 flex gap-3 sticky bottom-0 bg-white">
+          <button onclick="closeEditModal()" class="flex-1 px-4 py-2.5 rounded-lg border border-zinc-200 text-zinc-700 font-medium hover:bg-zinc-50 transition">
+            Cancel
+          </button>
+          <button onclick="saveEdits()" class="flex-1 px-4 py-2.5 rounded-lg bg-brand-500 text-white font-medium hover:bg-brand-600 transition">
+            Update Citation
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Formats -->
+    <div id="all-formats" class="hidden">
+      <div class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden mt-4">
+        <div class="px-5 py-3 bg-zinc-50 border-b border-zinc-200">
+          <span class="text-sm font-medium text-zinc-700">All Formats</span>
+        </div>
+        <div class="p-5 space-y-4">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-medium text-zinc-500">APA 7</span>
+              <button onclick="copyFormat('apa7', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
+            </div>
+            <p id="format-apa7" class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-medium text-zinc-500">MLA 9</span>
+              <button onclick="copyFormat('mla9', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
+            </div>
+            <p id="format-mla9" class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-medium text-zinc-500">Chicago</span>
+              <button onclick="copyFormat('chicago', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
+            </div>
+            <p id="format-chicago" class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+          </div>
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-medium text-zinc-500">Harvard</span>
+              <button onclick="copyFormat('harvard', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
+            </div>
+            <p id="format-harvard" class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
           </div>
         </div>
       </div>
-    </main>
+    </div>
 
-    <!-- Footer -->
-    <footer
-      class="border-t border-zinc-200 py-6 text-center text-sm text-zinc-400"
-    >
-      <p>Built for students. No ads, no BS.</p>
-    </footer>
+    <!-- Loading State -->
+    <div id="loading" class="hidden text-center py-8">
+      <div class="inline-block w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-zinc-500 mt-3 text-sm">Generating citation...</p>
+    </div>
 
-    <script>
-      let currentStyle = "apa7";
-      let citations = {};
-      let allFormatsVisible = false;
-      let searchResults = [];
-      let selectedIndex = -1;
-      let searchTimeout = null;
+    <!-- Error State -->
+    <div id="error" class="hidden">
+      <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+        <p id="error-text"></p>
+      </div>
+    </div>
 
-      const styleLabels = {
-        apa7: "APA 7",
-        mla9: "MLA 9",
-        chicago: "Chicago",
-        harvard: "Harvard",
-      };
+    <!-- Trust Signals -->
+    <div class="mt-16 text-center">
+      <p class="text-sm text-zinc-400 mb-6">Free forever. No login required.</p>
+      <div class="flex justify-center gap-8 text-zinc-400">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+          <span class="text-sm">Instant</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+          <span class="text-sm">Accurate</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span class="text-sm">100% Free</span>
+        </div>
+      </div>
+    </div>
+  </main>
 
-      const sourceInput = document.getElementById("source-input");
-      const clearBtn = document.getElementById("clear-btn");
-      const searchDropdown = document.getElementById("search-dropdown");
+  <!-- Footer -->
+  <footer class="border-t border-zinc-200 py-6 text-center text-sm text-zinc-400">
+    <p>Built for students. No ads, no BS.</p>
+  </footer>
 
-      // Detect if input is a direct source (URL, DOI, ISBN) or needs search
-      function isDirectSource(input) {
-        const s = input.trim().toLowerCase();
+  <script>
+    let currentStyle = 'apa7';
+    let citations = {};
+    let allFormatsVisible = false;
+    let searchResults = [];
+    let selectedIndex = -1;
+    let searchTimeout = null;
+    let currentMetadata = null; // Store current citation metadata for editing
 
-        // DOI
-        if (s.startsWith("10.") || s.includes("doi.org/")) return true;
+    const styleLabels = {
+      apa7: 'APA 7',
+      mla9: 'MLA 9',
+      chicago: 'Chicago',
+      harvard: 'Harvard'
+    };
 
-        // ISBN
-        const isbnClean = input.replace(/[-\s]/g, "");
-        if (/^(\d{10}|\d{13})$/.test(isbnClean)) return true;
+    const sourceInput = document.getElementById('source-input');
+    const clearBtn = document.getElementById('clear-btn');
+    const searchDropdown = document.getElementById('search-dropdown');
 
-        // URL
-        if (s.startsWith("http://") || s.startsWith("https://")) return true;
+    // Detect if input is a direct source (URL, DOI, ISBN) or needs search
+    function isDirectSource(input) {
+      const s = input.trim().toLowerCase();
+      
+      // DOI
+      if (s.startsWith('10.') || s.includes('doi.org/')) return true;
+      
+      // ISBN
+      const isbnClean = input.replace(/[-\s]/g, '');
+      if (/^(\d{10}|\d{13})$/.test(isbnClean)) return true;
+      
+      // URL
+      if (s.startsWith('http://') || s.startsWith('https://')) return true;
+      
+      return false;
+    }
 
-        return false;
+    // Handle input changes
+    function handleInput() {
+      const input = sourceInput.value.trim();
+      
+      // Show/hide clear button
+      if (input) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+        closeDropdown();
+        return;
       }
 
-      // Handle input changes
-      function handleInput() {
-        const input = sourceInput.value.trim();
+      // If it's a direct source, don't show search
+      if (isDirectSource(input)) {
+        closeDropdown();
+        return;
+      }
 
-        // Show/hide clear button
-        if (input) {
-          clearBtn.classList.remove("hidden");
+      // Debounce search
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        if (input.length >= 3) {
+          performSearch(input);
+        }
+      }, 300);
+    }
+
+    // Handle keyboard navigation
+    function handleKeyDown(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        
+        // If dropdown is open and item selected, use that
+        if (!searchDropdown.classList.contains('hidden') && selectedIndex >= 0) {
+          selectSearchResult(searchResults[selectedIndex]);
         } else {
-          clearBtn.classList.add("hidden");
-          closeDropdown();
-          return;
+          handleCiteClick();
         }
-
-        // If it's a direct source, don't show search
-        if (isDirectSource(input)) {
-          closeDropdown();
-          return;
+      } else if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        if (!searchDropdown.classList.contains('hidden') && searchResults.length > 0) {
+          selectedIndex = Math.min(selectedIndex + 1, searchResults.length - 1);
+          updateSelectedResult();
         }
-
-        // Debounce search
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-          if (input.length >= 3) {
-            performSearch(input);
-          }
-        }, 300);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (!searchDropdown.classList.contains('hidden') && searchResults.length > 0) {
+          selectedIndex = Math.max(selectedIndex - 1, 0);
+          updateSelectedResult();
+        }
+      } else if (event.key === 'Escape') {
+        closeDropdown();
       }
+    }
 
-      // Handle keyboard navigation
-      function handleKeyDown(event) {
-        if (event.key === "Enter") {
-          event.preventDefault();
+    // Perform search
+    async function performSearch(query) {
+      const resultsContainer = document.getElementById('search-results');
+      const loadingEl = document.getElementById('search-loading');
+      const emptyEl = document.getElementById('search-empty');
 
-          // If dropdown is open and item selected, use that
-          if (
-            !searchDropdown.classList.contains("hidden") &&
-            selectedIndex >= 0
-          ) {
-            selectSearchResult(searchResults[selectedIndex]);
-          } else {
-            handleCiteClick();
-          }
-        } else if (event.key === "ArrowDown") {
-          event.preventDefault();
-          if (
-            !searchDropdown.classList.contains("hidden") &&
-            searchResults.length > 0
-          ) {
-            selectedIndex = Math.min(
-              selectedIndex + 1,
-              searchResults.length - 1
-            );
-            updateSelectedResult();
-          }
-        } else if (event.key === "ArrowUp") {
-          event.preventDefault();
-          if (
-            !searchDropdown.classList.contains("hidden") &&
-            searchResults.length > 0
-          ) {
-            selectedIndex = Math.max(selectedIndex - 1, 0);
-            updateSelectedResult();
-          }
-        } else if (event.key === "Escape") {
-          closeDropdown();
+      // Show dropdown with loading
+      searchDropdown.classList.remove('hidden');
+      resultsContainer.innerHTML = '';
+      resultsContainer.classList.add('hidden');
+      emptyEl.classList.add('hidden');
+      loadingEl.classList.remove('hidden');
+
+      try {
+        const response = await fetch('/api/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        });
+
+        const data = await response.json();
+        searchResults = data.results || [];
+        selectedIndex = -1;
+
+        loadingEl.classList.add('hidden');
+
+        if (searchResults.length === 0) {
+          emptyEl.classList.remove('hidden');
+        } else {
+          resultsContainer.classList.remove('hidden');
+          renderSearchResults();
         }
+      } catch (err) {
+        console.error('Search error:', err);
+        loadingEl.classList.add('hidden');
+        emptyEl.textContent = 'Search failed. Please try again.';
+        emptyEl.classList.remove('hidden');
       }
+    }
 
-      // Perform search
-      async function performSearch(query) {
-        const resultsContainer = document.getElementById("search-results");
-        const loadingEl = document.getElementById("search-loading");
-        const emptyEl = document.getElementById("search-empty");
-
-        // Show dropdown with loading
-        searchDropdown.classList.remove("hidden");
-        resultsContainer.innerHTML = "";
-        resultsContainer.classList.add("hidden");
-        emptyEl.classList.add("hidden");
-        loadingEl.classList.remove("hidden");
-
-        try {
-          const response = await fetch("/api/search", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query }),
-          });
-
-          const data = await response.json();
-          searchResults = data.results || [];
-          selectedIndex = -1;
-
-          loadingEl.classList.add("hidden");
-
-          if (searchResults.length === 0) {
-            emptyEl.classList.remove("hidden");
-          } else {
-            resultsContainer.classList.remove("hidden");
-            renderSearchResults();
-          }
-        } catch (err) {
-          console.error("Search error:", err);
-          loadingEl.classList.add("hidden");
-          emptyEl.textContent = "Search failed. Please try again.";
-          emptyEl.classList.remove("hidden");
-        }
-      }
-
-      // Render search results
-      function renderSearchResults() {
-        const container = document.getElementById("search-results");
-        container.innerHTML = searchResults
-          .map(
-            (result, index) => `
+    // Render search results
+    function renderSearchResults() {
+      const container = document.getElementById('search-results');
+      container.innerHTML = searchResults.map((result, index) => `
         <div 
-          class="search-result-item px-4 py-3 cursor-pointer border-b border-zinc-100 last:border-0 ${
-            index === selectedIndex ? "selected" : ""
-          }"
+          class="search-result-item px-4 py-3 cursor-pointer border-b border-zinc-100 last:border-0 ${index === selectedIndex ? 'selected' : ''}"
           onclick="selectSearchResult(searchResults[${index}])"
           onmouseenter="selectedIndex = ${index}; updateSelectedResult()"
         >
           <div class="flex items-start justify-between gap-3">
             <div class="flex-1 min-w-0">
-              <div class="font-medium text-sm truncate">${escapeHtml(
-                result.title
-              )}</div>
+              <div class="font-medium text-sm truncate">${escapeHtml(result.title)}</div>
               <div class="text-xs text-zinc-500 mt-1">
-                ${
-                  result.authors.length > 0
-                    ? escapeHtml(result.authors.slice(0, 2).join(", ")) +
-                      (result.authors.length > 2 ? " et al." : "")
-                    : "Unknown author"
-                }
-                ${result.year ? " · " + result.year : ""}
-                ${result.publisher ? " · " + escapeHtml(result.publisher) : ""}
+                ${result.authors.length > 0 ? escapeHtml(result.authors.slice(0, 2).join(', ')) + (result.authors.length > 2 ? ' et al.' : '') : 'Unknown author'}
+                ${result.year ? ' · ' + result.year : ''}
+                ${result.publisher ? ' · ' + escapeHtml(result.publisher) : ''}
               </div>
             </div>
-            <span class="type-badge bg-zinc-100 text-zinc-600 flex-shrink-0">${
-              result.type
-            }</span>
+            <span class="type-badge bg-zinc-100 text-zinc-600 flex-shrink-0">${result.type}</span>
           </div>
         </div>
-      `
-          )
-          .join("");
-      }
+      `).join('');
+    }
 
-      // Update selected result highlighting
-      function updateSelectedResult() {
-        const items = document.querySelectorAll(".search-result-item");
-        items.forEach((item, index) => {
-          if (index === selectedIndex) {
-            item.classList.add("selected");
-          } else {
-            item.classList.remove("selected");
-          }
+    // Update selected result highlighting
+    function updateSelectedResult() {
+      const items = document.querySelectorAll('.search-result-item');
+      items.forEach((item, index) => {
+        if (index === selectedIndex) {
+          item.classList.add('selected');
+        } else {
+          item.classList.remove('selected');
+        }
+      });
+    }
+
+    // Select a search result and generate citation
+    async function selectSearchResult(result) {
+      closeDropdown();
+      sourceInput.value = result.title;
+
+      // Store metadata for editing
+      currentMetadata = {
+        authors: result.authors || [],
+        title: result.title || '',
+        publisher: result.publisher || '',
+        siteName: result.publisher || '',
+        year: result.year || '',
+        month: '',
+        day: '',
+        url: '',
+        type: result.type || 'book'
+      };
+
+      // Show loading
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('all-formats').classList.add('hidden');
+      document.getElementById('error').classList.add('hidden');
+      document.getElementById('loading').classList.remove('hidden');
+      allFormatsVisible = false;
+      document.getElementById('toggle-formats-btn').textContent = 'Show all formats';
+
+      try {
+        const response = await fetch('/api/cite/selected', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ result })
         });
-      }
 
-      // Select a search result and generate citation
-      async function selectSearchResult(result) {
-        closeDropdown();
-        sourceInput.value = result.title;
+        const data = await response.json();
 
-        // Show loading
-        document.getElementById("result").classList.add("hidden");
-        document.getElementById("all-formats").classList.add("hidden");
-        document.getElementById("error").classList.add("hidden");
-        document.getElementById("loading").classList.remove("hidden");
-        allFormatsVisible = false;
-        document.getElementById("toggle-formats-btn").textContent =
-          "Show all formats";
-
-        try {
-          const response = await fetch("/api/cite/selected", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ result }),
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(data.error || "Failed to generate citation");
-          }
-
-          citations = data.citations;
-          displayCitations();
-        } catch (err) {
-          document.getElementById("loading").classList.add("hidden");
-          document.getElementById("error-text").textContent = err.message;
-          document.getElementById("error").classList.remove("hidden");
-        }
-      }
-
-      // Handle cite button click
-      async function handleCiteClick() {
-        const input = sourceInput.value.trim();
-        if (!input) return;
-
-        // If dropdown is showing results, don't proceed without selection
-        if (
-          !searchDropdown.classList.contains("hidden") &&
-          searchResults.length > 0
-        ) {
-          // If something selected, use it
-          if (selectedIndex >= 0) {
-            selectSearchResult(searchResults[selectedIndex]);
-          } else {
-            // Auto-select first result
-            selectSearchResult(searchResults[0]);
-          }
-          return;
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to generate citation');
         }
 
-        // If it's a text query, trigger search
-        if (!isDirectSource(input)) {
+        citations = data.citations;
+        
+        // Update metadata with any additional info from result
+        if (result.raw) {
+          if (result.source === 'google_books' && result.raw.volumeInfo) {
+            currentMetadata.url = result.raw.volumeInfo.infoLink || '';
+          } else if (result.source === 'openlibrary' && result.raw.key) {
+            currentMetadata.url = `https://openlibrary.org${result.raw.key}`;
+          }
+        }
+        
+        displayCitations();
+        populateQuickEdit();
+      } catch (err) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error-text').textContent = err.message;
+        document.getElementById('error').classList.remove('hidden');
+      }
+    }
+
+    // Handle cite button click
+    async function handleCiteClick() {
+      const input = sourceInput.value.trim();
+      if (!input) return;
+
+      // If dropdown is showing results, don't proceed without selection
+      if (!searchDropdown.classList.contains('hidden') && searchResults.length > 0) {
+        // If something selected, use it
+        if (selectedIndex >= 0) {
+          selectSearchResult(searchResults[selectedIndex]);
+        } else {
+          // Auto-select first result
+          selectSearchResult(searchResults[0]);
+        }
+        return;
+      }
+
+      // If it's a text query, trigger search
+      if (!isDirectSource(input)) {
+        performSearch(input);
+        return;
+      }
+
+      // Direct source - generate citation immediately
+      closeDropdown();
+      
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('all-formats').classList.add('hidden');
+      document.getElementById('error').classList.add('hidden');
+      document.getElementById('loading').classList.remove('hidden');
+      allFormatsVisible = false;
+      document.getElementById('toggle-formats-btn').textContent = 'Show all formats';
+
+      try {
+        const response = await fetch('/api/cite', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: input })
+        });
+
+        const data = await response.json();
+
+        if (data.needsSearch) {
+          document.getElementById('loading').classList.add('hidden');
           performSearch(input);
           return;
         }
 
-        // Direct source - generate citation immediately
-        closeDropdown();
-
-        document.getElementById("result").classList.add("hidden");
-        document.getElementById("all-formats").classList.add("hidden");
-        document.getElementById("error").classList.add("hidden");
-        document.getElementById("loading").classList.remove("hidden");
-        allFormatsVisible = false;
-        document.getElementById("toggle-formats-btn").textContent =
-          "Show all formats";
-
-        try {
-          const response = await fetch("/api/cite", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ source: input }),
-          });
-
-          const data = await response.json();
-
-          if (data.needsSearch) {
-            document.getElementById("loading").classList.add("hidden");
-            performSearch(input);
-            return;
-          }
-
-          if (!response.ok) {
-            throw new Error(data.error || "Failed to generate citation");
-          }
-
-          citations = data.citations;
-          displayCitations();
-        } catch (err) {
-          document.getElementById("loading").classList.add("hidden");
-          document.getElementById("error-text").textContent = err.message;
-          document.getElementById("error").classList.remove("hidden");
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to generate citation');
         }
+
+        citations = data.citations;
+        
+        // Store metadata for editing
+        currentMetadata = data.metadata || {
+          authors: [],
+          title: '',
+          publisher: '',
+          siteName: '',
+          year: '',
+          month: '',
+          day: '',
+          url: input,
+          type: 'website'
+        };
+        
+        displayCitations();
+        populateQuickEdit();
+      } catch (err) {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('error-text').textContent = err.message;
+        document.getElementById('error').classList.remove('hidden');
       }
+    }
 
-      // Display citations
-      function displayCitations() {
-        document.getElementById("loading").classList.add("hidden");
-        document.getElementById("citation-text").innerHTML =
-          citations[currentStyle];
-        document.getElementById(
-          "result-style"
-        ).textContent = `${styleLabels[currentStyle]} Format`;
+    // Display citations
+    function displayCitations() {
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('citation-text').innerHTML = citations[currentStyle];
+      document.getElementById('result-style').textContent = `${styleLabels[currentStyle]} Format`;
 
-        Object.keys(citations).forEach((style) => {
-          const el = document.getElementById(`format-${style}`);
-          if (el) el.innerHTML = citations[style];
-        });
-
-        document.getElementById("result").classList.remove("hidden");
-      }
-
-      // Close dropdown
-      function closeDropdown() {
-        searchDropdown.classList.add("hidden");
-        searchResults = [];
-        selectedIndex = -1;
-      }
-
-      // Escape HTML
-      function escapeHtml(text) {
-        const div = document.createElement("div");
-        div.textContent = text;
-        return div.innerHTML;
-      }
-
-      // Clear form
-      function clearForm() {
-        sourceInput.value = "";
-        clearBtn.classList.add("hidden");
-        closeDropdown();
-        document.getElementById("result").classList.add("hidden");
-        document.getElementById("all-formats").classList.add("hidden");
-        document.getElementById("error").classList.add("hidden");
-        allFormatsVisible = false;
-        document.getElementById("toggle-formats-btn").textContent =
-          "Show all formats";
-        citations = {};
-        sourceInput.focus();
-      }
-
-      // Select citation style
-      function selectStyle(style) {
-        currentStyle = style;
-
-        document.querySelectorAll(".style-btn").forEach((btn) => {
-          btn.className =
-            "style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300";
-        });
-        document.getElementById(`btn-${style}`).className =
-          "style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-brand-500 text-white";
-
-        if (citations[style]) {
-          document.getElementById("citation-text").innerHTML = citations[style];
-          document.getElementById(
-            "result-style"
-          ).textContent = `${styleLabels[style]} Format`;
-        }
-      }
-
-      // Show all formats
-      function showAllFormats() {
-        const allFormats = document.getElementById("all-formats");
-        const toggleBtn = document.getElementById("toggle-formats-btn");
-
-        allFormatsVisible = !allFormatsVisible;
-
-        if (allFormatsVisible) {
-          allFormats.classList.remove("hidden");
-          toggleBtn.textContent = "Hide all formats";
-        } else {
-          allFormats.classList.add("hidden");
-          toggleBtn.textContent = "Show all formats";
-        }
-      }
-
-      // Get plain text from HTML
-      function getPlainText(html) {
-        const temp = document.createElement("div");
-        temp.innerHTML = html;
-        return temp.textContent || temp.innerText || "";
-      }
-
-      // Copy citation
-      function copyCitation() {
-        const html = citations[currentStyle];
-        const text = getPlainText(html);
-        navigator.clipboard.writeText(text);
-
-        const btn = document.getElementById("copy-main-btn");
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML =
-          '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Copied!</span>';
-        btn.classList.remove("bg-brand-500", "hover:bg-brand-600");
-        btn.classList.add("bg-green-500");
-
-        setTimeout(() => {
-          btn.innerHTML = originalHTML;
-          btn.classList.remove("bg-green-500");
-          btn.classList.add("bg-brand-500", "hover:bg-brand-600");
-        }, 1500);
-      }
-
-      // Copy specific format
-      function copyFormat(style, buttonEl) {
-        const html = citations[style];
-        const text = getPlainText(html);
-        navigator.clipboard.writeText(text);
-
-        const originalText = buttonEl.textContent;
-        buttonEl.textContent = "Copied!";
-        buttonEl.classList.remove("text-brand-500", "hover:text-brand-600");
-        buttonEl.classList.add("text-green-500");
-
-        setTimeout(() => {
-          buttonEl.textContent = originalText;
-          buttonEl.classList.remove("text-green-500");
-          buttonEl.classList.add("text-brand-500", "hover:text-brand-600");
-        }, 1500);
-      }
-
-      // Close dropdown when clicking outside
-      document.addEventListener("click", (e) => {
-        if (!searchDropdown.contains(e.target) && e.target !== sourceInput) {
-          closeDropdown();
-        }
+      Object.keys(citations).forEach(style => {
+        const el = document.getElementById(`format-${style}`);
+        if (el) el.innerHTML = citations[style];
       });
-    </script>
-  </body>
+
+      document.getElementById('result').classList.remove('hidden');
+    }
+
+    // Close dropdown
+    function closeDropdown() {
+      searchDropdown.classList.add('hidden');
+      searchResults = [];
+      selectedIndex = -1;
+    }
+
+    // Escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Clear form
+    function clearForm() {
+      sourceInput.value = '';
+      clearBtn.classList.add('hidden');
+      closeDropdown();
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('all-formats').classList.add('hidden');
+      document.getElementById('error').classList.add('hidden');
+      allFormatsVisible = false;
+      document.getElementById('toggle-formats-btn').textContent = 'Show all formats';
+      citations = {};
+      sourceInput.focus();
+    }
+
+    // Select citation style
+    function selectStyle(style) {
+      currentStyle = style;
+
+      document.querySelectorAll('.style-btn').forEach(btn => {
+        btn.className = 'style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-white text-zinc-600 border border-zinc-200 hover:border-brand-300';
+      });
+      document.getElementById(`btn-${style}`).className = 'style-btn px-4 py-2 rounded-full text-sm font-medium transition bg-brand-500 text-white';
+
+      if (citations[style]) {
+        document.getElementById('citation-text').innerHTML = citations[style];
+        document.getElementById('result-style').textContent = `${styleLabels[style]} Format`;
+      }
+    }
+
+    // Show all formats
+    function showAllFormats() {
+      const allFormats = document.getElementById('all-formats');
+      const toggleBtn = document.getElementById('toggle-formats-btn');
+
+      allFormatsVisible = !allFormatsVisible;
+
+      if (allFormatsVisible) {
+        allFormats.classList.remove('hidden');
+        toggleBtn.textContent = 'Hide all formats';
+      } else {
+        allFormats.classList.add('hidden');
+        toggleBtn.textContent = 'Show all formats';
+      }
+    }
+
+    // Get plain text from HTML
+    function getPlainText(html) {
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+      return temp.textContent || temp.innerText || '';
+    }
+
+    // Copy citation
+    function copyCitation() {
+      const html = citations[currentStyle];
+      const text = getPlainText(html);
+      navigator.clipboard.writeText(text);
+
+      const btn = document.getElementById('copy-main-btn');
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Copied!</span>';
+      btn.classList.remove('bg-brand-500', 'hover:bg-brand-600');
+      btn.classList.add('bg-green-500');
+
+      setTimeout(() => {
+        btn.innerHTML = originalHTML;
+        btn.classList.remove('bg-green-500');
+        btn.classList.add('bg-brand-500', 'hover:bg-brand-600');
+      }, 1500);
+    }
+
+    // Copy specific format
+    function copyFormat(style, buttonEl) {
+      const html = citations[style];
+      const text = getPlainText(html);
+      navigator.clipboard.writeText(text);
+
+      const originalText = buttonEl.textContent;
+      buttonEl.textContent = 'Copied!';
+      buttonEl.classList.remove('text-brand-500', 'hover:text-brand-600');
+      buttonEl.classList.add('text-green-500');
+
+      setTimeout(() => {
+        buttonEl.textContent = originalText;
+        buttonEl.classList.remove('text-green-500');
+        buttonEl.classList.add('text-brand-500', 'hover:text-brand-600');
+      }, 1500);
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!searchDropdown.contains(e.target) && e.target !== sourceInput) {
+        closeDropdown();
+      }
+    });
+
+    // Populate quick edit fields from current metadata
+    function populateQuickEdit() {
+      if (!currentMetadata) return;
+      document.getElementById('quick-year').value = currentMetadata.year || '';
+      document.getElementById('quick-month').value = currentMetadata.month || '';
+      document.getElementById('quick-day').value = currentMetadata.day || '';
+    }
+
+    // Update citation from quick edit fields
+    async function updateFromQuickEdit() {
+      if (!currentMetadata) return;
+      
+      currentMetadata.year = document.getElementById('quick-year').value.trim();
+      currentMetadata.month = document.getElementById('quick-month').value;
+      currentMetadata.day = document.getElementById('quick-day').value.trim();
+      
+      await regenerateCitations();
+    }
+
+    // Open edit modal
+    function openEditModal() {
+      if (!currentMetadata) return;
+      
+      // Populate form fields
+      document.getElementById('edit-authors').value = currentMetadata.authors?.join('; ') || '';
+      document.getElementById('edit-title').value = currentMetadata.title || '';
+      document.getElementById('edit-year').value = currentMetadata.year || '';
+      document.getElementById('edit-month').value = currentMetadata.month || '';
+      document.getElementById('edit-day').value = currentMetadata.day || '';
+      document.getElementById('edit-publisher').value = currentMetadata.publisher || currentMetadata.siteName || '';
+      document.getElementById('edit-url').value = currentMetadata.url || '';
+      document.getElementById('edit-type').value = currentMetadata.type || 'website';
+      
+      document.getElementById('edit-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close edit modal
+    function closeEditModal() {
+      document.getElementById('edit-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    // Save edits from modal
+    async function saveEdits() {
+      // Update metadata from form
+      const authorsStr = document.getElementById('edit-authors').value.trim();
+      currentMetadata.authors = authorsStr ? authorsStr.split(';').map(a => a.trim()).filter(a => a) : [];
+      currentMetadata.title = document.getElementById('edit-title').value.trim();
+      currentMetadata.year = document.getElementById('edit-year').value.trim();
+      currentMetadata.month = document.getElementById('edit-month').value;
+      currentMetadata.day = document.getElementById('edit-day').value.trim();
+      currentMetadata.publisher = document.getElementById('edit-publisher').value.trim();
+      currentMetadata.siteName = currentMetadata.publisher;
+      currentMetadata.url = document.getElementById('edit-url').value.trim();
+      currentMetadata.type = document.getElementById('edit-type').value;
+      
+      closeEditModal();
+      await regenerateCitations();
+      
+      // Sync quick edit fields
+      populateQuickEdit();
+    }
+
+    // Regenerate citations from current metadata
+    async function regenerateCitations() {
+      try {
+        const response = await fetch('/api/cite/manual', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ metadata: currentMetadata })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to regenerate citation');
+        }
+
+        citations = data.citations;
+        displayCitations();
+      } catch (err) {
+        console.error('Regenerate error:', err);
+        // Fallback to client-side formatting if API fails
+        citations = formatCitationsClientSide(currentMetadata);
+        displayCitations();
+      }
+    }
+
+    // Client-side citation formatting (fallback)
+    function formatCitationsClientSide(m) {
+      const today = new Date();
+      const accessDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      const accessDateShort = today.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+      
+      const year = m.year || 'n.d.';
+      const dateParens = m.year ? `(${m.year})` : '(n.d.)';
+      const title = m.title || 'Untitled';
+      const italicTitle = `<i>${title}</i>`;
+      const url = m.url || '';
+      const publisher = m.publisher || m.siteName || '';
+      
+      // Format authors
+      const formatAuthorAPA = (authors) => {
+        if (!authors || authors.length === 0) return publisher || 'Unknown';
+        return authors.map(name => {
+          const parts = name.split(' ');
+          if (parts.length === 1) return name;
+          const lastName = parts[parts.length - 1];
+          const initials = parts.slice(0, -1).map(p => p[0].toUpperCase() + '.').join(' ');
+          return `${lastName}, ${initials}`;
+        }).join(', & ');
+      };
+      
+      const formatAuthorMLA = (authors) => {
+        if (!authors || authors.length === 0) return '';
+        const parts = authors[0].split(' ');
+        if (parts.length === 1) return authors[0];
+        const lastName = parts[parts.length - 1];
+        const firstName = parts.slice(0, -1).join(' ');
+        if (authors.length === 1) return `${lastName}, ${firstName}`;
+        if (authors.length === 2) return `${lastName}, ${firstName}, and ${authors[1]}`;
+        return `${lastName}, ${firstName}, et al.`;
+      };
+      
+      const authorAPA = formatAuthorAPA(m.authors);
+      const authorMLA = formatAuthorMLA(m.authors);
+      const hasAuthor = m.authors && m.authors.length > 0;
+      const authorIsSiteName = !hasAuthor;
+      
+      let apa7, mla9, chicago, harvard;
+      
+      if (m.type === 'book') {
+        apa7 = `${authorAPA}. ${dateParens}. ${italicTitle}. ${publisher}.`;
+        mla9 = `${hasAuthor ? authorMLA + '. ' : ''}${italicTitle}. ${publisher}, ${year}.`;
+        chicago = `${hasAuthor ? authorMLA + '. ' : ''}${italicTitle}. ${publisher}, ${year}.`;
+        harvard = `${authorAPA} (${year}) ${italicTitle}. ${publisher}.`;
+      } else {
+        // Website / default
+        if (authorIsSiteName) {
+          apa7 = `${publisher}. ${dateParens}. ${italicTitle}. ${url}`;
+          mla9 = `"${title}." <i>${publisher}</i>, ${year}, ${url}. Accessed ${accessDateShort}.`;
+          chicago = `"${title}." <i>${publisher}</i>. Accessed ${accessDate}. ${url}.`;
+          harvard = `${publisher} (${year}) ${italicTitle}. Available at: ${url} (Accessed: ${accessDate}).`;
+        } else {
+          apa7 = `${authorAPA}. ${dateParens}. ${italicTitle}. ${publisher}. ${url}`;
+          mla9 = `${authorMLA}. "${title}." <i>${publisher}</i>, ${year}, ${url}. Accessed ${accessDateShort}.`;
+          chicago = `${authorMLA}. "${title}." <i>${publisher}</i>, ${year}. ${url}.`;
+          harvard = `${authorAPA} (${year}) ${italicTitle}, ${publisher}. Available at: ${url} (Accessed: ${accessDate}).`;
+        }
+      }
+      
+      return { apa7, mla9, chicago, harvard };
+    }
+
+    // Close modal on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !document.getElementById('edit-modal').classList.contains('hidden')) {
+        closeEditModal();
+      }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('edit-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'edit-modal') {
+        closeEditModal();
+      }
+    });
+  </script>
+</body>
 </html>
