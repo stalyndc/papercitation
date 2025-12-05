@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guides - Paper Citation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#fef2f2',
+              100: '#fee2e2',
+              200: '#fecaca',
+              300: '#fca5a5',
+              400: '#f87171',
+              500: '#E84545',
+              600: '#dc2626',
+              700: '#b91c1c',
+              800: '#991b1b',
+              900: '#7f1d1d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900 min-h-screen">
+
+  <!-- Nav -->
+  <nav class="flex justify-between items-center px-6 py-4 max-w-4xl mx-auto">
+    <a href="/" class="flex items-center gap-2 hover:opacity-80 transition">
+      <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
+        <span class="text-white font-bold text-sm">P</span>
+      </div>
+      <span class="font-semibold text-zinc-800">Paper Citation</span>
+    </a>
+    <div class="flex gap-6 text-sm text-zinc-500">
+      <a href="/guides.html" class="text-brand-500 font-medium">Guides</a>
+      <a href="/formats.html" class="hover:text-brand-500 transition">Formats</a>
+      <a href="/about.html" class="hover:text-brand-500 transition">About</a>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <main class="max-w-3xl mx-auto px-6 py-16">
+    <h1 class="text-4xl font-bold text-zinc-900 mb-4">How to Use Paper Citation</h1>
+    <p class="text-lg text-zinc-600 mb-12">Generate accurate academic citations in seconds with our simple guide.</p>
+
+    <!-- Quick Start -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">Quick Start</h2>
+
+      <div class="space-y-6">
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 bg-brand-500 text-white rounded-lg flex items-center justify-center font-bold flex-shrink-0">1</div>
+            <div>
+              <h3 class="font-semibold text-zinc-900 mb-2">Choose Your Citation Style</h3>
+              <p class="text-zinc-600">Select from APA 7, MLA 9, Chicago, or Harvard format before entering your source.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 bg-brand-500 text-white rounded-lg flex items-center justify-center font-bold flex-shrink-0">2</div>
+            <div>
+              <h3 class="font-semibold text-zinc-900 mb-2">Enter Your Source</h3>
+              <p class="text-zinc-600 mb-3">Paste a URL, DOI, ISBN, or search for a book or article title.</p>
+              <div class="bg-zinc-50 rounded-lg p-3 font-mono text-sm text-zinc-700">
+                Examples:<br>
+                • https://example.com/article<br>
+                • 10.1234/example.doi<br>
+                • 978-0-123456-78-9<br>
+                • The Great Gatsby
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 bg-brand-500 text-white rounded-lg flex items-center justify-center font-bold flex-shrink-0">3</div>
+            <div>
+              <h3 class="font-semibold text-zinc-900 mb-2">Generate & Copy</h3>
+              <p class="text-zinc-600">Click "Cite" to generate your citation, then copy it to your clipboard with one click.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Input Types -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">Supported Input Types</h2>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="w-10 h-10 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-zinc-900 mb-2">Website URLs</h3>
+          <p class="text-sm text-zinc-600 mb-3">Paste any website URL to automatically extract metadata including title, author, and publication date.</p>
+          <div class="bg-zinc-50 rounded p-2 font-mono text-xs text-zinc-700">
+            https://example.com
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="w-10 h-10 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-zinc-900 mb-2">DOI (Digital Object Identifier)</h3>
+          <p class="text-sm text-zinc-600 mb-3">Enter a DOI to fetch accurate academic article information from CrossRef.</p>
+          <div class="bg-zinc-50 rounded p-2 font-mono text-xs text-zinc-700">
+            10.1234/example.doi<br>
+            doi.org/10.1234/example
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="w-10 h-10 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-zinc-900 mb-2">ISBN (Books)</h3>
+          <p class="text-sm text-zinc-600 mb-3">Enter an ISBN to retrieve book information from Google Books and OpenLibrary.</p>
+          <div class="bg-zinc-50 rounded p-2 font-mono text-xs text-zinc-700">
+            978-0-123456-78-9<br>
+            0123456789
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="w-10 h-10 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-zinc-900 mb-2">Text Search</h3>
+          <p class="text-sm text-zinc-600 mb-3">Search for books and articles by title, author, or keywords. Select from the results.</p>
+          <div class="bg-zinc-50 rounded p-2 font-mono text-xs text-zinc-700">
+            The Great Gatsby<br>
+            quantum physics theory
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="w-10 h-10 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-zinc-900 mb-2">YouTube Videos</h3>
+          <p class="text-sm text-zinc-600 mb-3">Paste a YouTube URL to cite video content with author and title information.</p>
+          <div class="bg-zinc-50 rounded p-2 font-mono text-xs text-zinc-700">
+            youtube.com/watch?v=...<br>
+            youtu.be/...
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="w-10 h-10 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-zinc-900 mb-2">Wikipedia Articles</h3>
+          <p class="text-sm text-zinc-600 mb-3">Cite Wikipedia encyclopedia entries with proper formatting for academic use.</p>
+          <div class="bg-zinc-50 rounded p-2 font-mono text-xs text-zinc-700">
+            wikipedia.org/wiki/...
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tips & Tricks -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">Tips & Best Practices</h2>
+
+      <div class="bg-white rounded-xl border border-zinc-200 p-6 space-y-4">
+        <div class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <div>
+            <p class="text-zinc-700"><strong>Always verify citations:</strong> While we fetch metadata automatically, it's good practice to review and verify the citation details match your source.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <div>
+            <p class="text-zinc-700"><strong>Use the Edit feature:</strong> Click "Edit" to manually adjust any citation details like author names, dates, or titles if needed.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <div>
+            <p class="text-zinc-700"><strong>Quick Date Edit:</strong> Use the date fields below the citation to quickly update publication dates without opening the full editor.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <div>
+            <p class="text-zinc-700"><strong>View all formats:</strong> Click "Show all formats" to see your citation in APA, MLA, Chicago, and Harvard simultaneously.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <div>
+            <p class="text-zinc-700"><strong>Keyboard shortcuts:</strong> Press Enter to generate a citation, use arrow keys to navigate search results, and Escape to close dropdowns.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section>
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">Frequently Asked Questions</h2>
+
+      <div class="space-y-4">
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <h3 class="font-semibold text-zinc-900 mb-2">Is Paper Citation free to use?</h3>
+          <p class="text-zinc-600">Yes! Paper Citation is 100% free with no account required. No ads, no hidden fees, just instant citations.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <h3 class="font-semibold text-zinc-900 mb-2">Are the citations accurate?</h3>
+          <p class="text-zinc-600">We fetch metadata from authoritative sources like CrossRef, Google Books, and OpenLibrary. However, always review citations for accuracy as automated systems may occasionally miss nuances.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <h3 class="font-semibold text-zinc-900 mb-2">Can I edit the generated citations?</h3>
+          <p class="text-zinc-600">Absolutely! Click the "Edit" button to modify any field including authors, title, date, publisher, and more. Changes update all citation formats instantly.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <h3 class="font-semibold text-zinc-900 mb-2">What citation styles do you support?</h3>
+          <p class="text-zinc-600">We support APA 7th edition, MLA 9th edition, Chicago, and Harvard citation styles.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <h3 class="font-semibold text-zinc-900 mb-2">Do you store my citations or search history?</h3>
+          <p class="text-zinc-600">No. All citations are generated in real-time and nothing is stored. Your privacy is important to us.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="mt-16 text-center">
+      <a href="/" class="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-8 py-3 rounded-lg font-medium transition">
+        Start Citing
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-zinc-200 py-6 text-center text-sm text-zinc-400">
+    <p>Built for students. No ads, no BS.</p>
+  </footer>
+</body>
+</html>

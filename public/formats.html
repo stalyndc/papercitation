@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Citation Formats - Paper Citation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#fef2f2',
+              100: '#fee2e2',
+              200: '#fecaca',
+              300: '#fca5a5',
+              400: '#f87171',
+              500: '#E84545',
+              600: '#dc2626',
+              700: '#b91c1c',
+              800: '#991b1b',
+              900: '#7f1d1d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .citation-example { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900 min-h-screen">
+
+  <!-- Nav -->
+  <nav class="flex justify-between items-center px-6 py-4 max-w-4xl mx-auto">
+    <a href="/" class="flex items-center gap-2 hover:opacity-80 transition">
+      <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
+        <span class="text-white font-bold text-sm">P</span>
+      </div>
+      <span class="font-semibold text-zinc-800">Paper Citation</span>
+    </a>
+    <div class="flex gap-6 text-sm text-zinc-500">
+      <a href="/guides.html" class="hover:text-brand-500 transition">Guides</a>
+      <a href="/formats.html" class="text-brand-500 font-medium">Formats</a>
+      <a href="/about.html" class="hover:text-brand-500 transition">About</a>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <main class="max-w-3xl mx-auto px-6 py-16">
+    <h1 class="text-4xl font-bold text-zinc-900 mb-4">Citation Formats</h1>
+    <p class="text-lg text-zinc-600 mb-12">Learn about the different citation styles we support and when to use them.</p>
+
+    <!-- APA 7 -->
+    <section class="mb-12">
+      <div class="bg-white rounded-xl border border-zinc-200 overflow-hidden">
+        <div class="bg-brand-500 px-6 py-4">
+          <h2 class="text-2xl font-bold text-white">APA 7th Edition</h2>
+          <p class="text-brand-50 text-sm mt-1">American Psychological Association</p>
+        </div>
+        <div class="p-6">
+          <div class="mb-6">
+            <h3 class="font-semibold text-zinc-900 mb-2">When to Use</h3>
+            <p class="text-zinc-600">APA style is commonly used in psychology, education, social sciences, and business. It emphasizes the date of publication and uses author-date citations.</p>
+          </div>
+
+          <div class="mb-6">
+            <h3 class="font-semibold text-zinc-900 mb-2">Key Features</h3>
+            <ul class="list-disc list-inside space-y-1 text-zinc-600">
+              <li>Author's last name and initials</li>
+              <li>Publication year in parentheses</li>
+              <li>Italicized titles for books and websites</li>
+              <li>Sentence case for titles (only first word capitalized)</li>
+              <li>Ampersand (&) before final author</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-zinc-900 mb-3">Examples</h3>
+            <div class="space-y-4">
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Book</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  Smith, J. A., & Brown, M. K. (2020). <i>Understanding Modern Psychology</i>. Academic Press.
+                </div>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Journal Article</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  Johnson, R. L. (2021). Cognitive processes in learning. <i>Journal of Educational Psychology</i>. https://doi.org/10.1234/example
+                </div>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Website</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  National Institute of Health. (2022). <i>Mental health resources</i>. https://www.nih.gov/mental-health
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MLA 9 -->
+    <section class="mb-12">
+      <div class="bg-white rounded-xl border border-zinc-200 overflow-hidden">
+        <div class="bg-blue-600 px-6 py-4">
+          <h2 class="text-2xl font-bold text-white">MLA 9th Edition</h2>
+          <p class="text-blue-50 text-sm mt-1">Modern Language Association</p>
+        </div>
+        <div class="p-6">
+          <div class="mb-6">
+            <h3 class="font-semibold text-zinc-900 mb-2">When to Use</h3>
+            <p class="text-zinc-600">MLA style is primarily used in humanities, especially for literature, languages, and cultural studies. It focuses on authorship and page numbers for in-text citations.</p>
+          </div>
+
+          <div class="mb-6">
+            <h3 class="font-semibold text-zinc-900 mb-2">Key Features</h3>
+            <ul class="list-disc list-inside space-y-1 text-zinc-600">
+              <li>Author's last name, first name</li>
+              <li>Title in quotation marks for articles, italics for books</li>
+              <li>Title case for all titles</li>
+              <li>Access date for web sources</li>
+              <li>"et al." for three or more authors</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-zinc-900 mb-3">Examples</h3>
+            <div class="space-y-4">
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Book</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  Fitzgerald, F. Scott. <i>The Great Gatsby</i>. Scribner, 1925.
+                </div>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Journal Article</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  Anderson, Chris. "The Long Tail." <i>Wired Magazine</i>, 2004, https://www.wired.com/long-tail. Accessed 15 Jan. 2024.
+                </div>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Website</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  "Climate Change Facts." <i>NASA</i>, 2023, https://climate.nasa.gov/facts. Accessed 15 Jan. 2024.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chicago -->
+    <section class="mb-12">
+      <div class="bg-white rounded-xl border border-zinc-200 overflow-hidden">
+        <div class="bg-amber-600 px-6 py-4">
+          <h2 class="text-2xl font-bold text-white">Chicago Style</h2>
+          <p class="text-amber-50 text-sm mt-1">Chicago Manual of Style</p>
+        </div>
+        <div class="p-6">
+          <div class="mb-6">
+            <h3 class="font-semibold text-zinc-900 mb-2">When to Use</h3>
+            <p class="text-zinc-600">Chicago style is widely used in history, arts, and some social sciences. It offers two systems: notes-bibliography (humanities) and author-date (sciences). We provide the notes-bibliography format.</p>
+          </div>
+
+          <div class="mb-6">
+            <h3 class="font-semibold text-zinc-900 mb-2">Key Features</h3>
+            <ul class="list-disc list-inside space-y-1 text-zinc-600">
+              <li>Flexible format with footnotes or endnotes</li>
+              <li>Full publication details in bibliography</li>
+              <li>Title case for most titles</li>
+              <li>Comprehensive publication information</li>
+              <li>Different formats for first and subsequent citations</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-zinc-900 mb-3">Examples</h3>
+            <div class="space-y-4">
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Book</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  Turabian, Kate L. <i>A Manual for Writers of Research Papers, Theses, and Dissertations</i>. University of Chicago Press, 2018.
+                </div>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Journal Article</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  Gardner, Howard. "Multiple Intelligences Theory." <i>Educational Researcher</i>, 1995. https://doi.org/10.1234/example.
+                </div>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Website</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  "Digital Resources." <i>Library of Congress</i>. Accessed January 15, 2024. https://www.loc.gov/digital.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Harvard -->
+    <section class="mb-12">
+      <div class="bg-white rounded-xl border border-zinc-200 overflow-hidden">
+        <div class="bg-green-700 px-6 py-4">
+          <h2 class="text-2xl font-bold text-white">Harvard Style</h2>
+          <p class="text-green-50 text-sm mt-1">Author-Date Referencing</p>
+        </div>
+        <div class="p-6">
+          <div class="mb-6">
+            <h3 class="font-semibold text-zinc-900 mb-2">When to Use</h3>
+            <p class="text-zinc-600">Harvard style is common in sciences, social sciences, and business across UK and Australian universities. It uses author-date citations similar to APA but with different formatting.</p>
+          </div>
+
+          <div class="mb-6">
+            <h3 class="font-semibold text-zinc-900 mb-2">Key Features</h3>
+            <ul class="list-disc list-inside space-y-1 text-zinc-600">
+              <li>Author surname followed by year in parentheses</li>
+              <li>Italicized titles for books and journals</li>
+              <li>"Available at:" for URLs</li>
+              <li>Access date in parentheses</li>
+              <li>Ampersand (&) for multiple authors</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-zinc-900 mb-3">Examples</h3>
+            <div class="space-y-4">
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Book</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  Dawkins, R. (2006) <i>The Selfish Gene</i>. Oxford University Press.
+                </div>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Journal Article</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  Watson, J. D. & Crick, F. H. (1953) Molecular structure of nucleic acids. <i>Nature</i>. Available at: https://doi.org/10.1038/example (Accessed: 15 January 2024).
+                </div>
+              </div>
+              <div>
+                <p class="text-xs text-zinc-500 mb-1 uppercase font-medium">Website</p>
+                <div class="bg-zinc-50 rounded-lg p-4 text-sm citation-example text-zinc-700">
+                  World Health Organization (2023) <i>Global Health Statistics</i>. Available at: https://www.who.int/statistics (Accessed: 15 January 2024).
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">Quick Comparison</h2>
+      <div class="bg-white rounded-xl border border-zinc-200 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-zinc-50 border-b border-zinc-200">
+              <th class="text-left p-4 font-semibold text-zinc-900">Feature</th>
+              <th class="text-left p-4 font-semibold text-zinc-900">APA 7</th>
+              <th class="text-left p-4 font-semibold text-zinc-900">MLA 9</th>
+              <th class="text-left p-4 font-semibold text-zinc-900">Chicago</th>
+              <th class="text-left p-4 font-semibold text-zinc-900">Harvard</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-100">
+            <tr>
+              <td class="p-4 font-medium text-zinc-700">Common Fields</td>
+              <td class="p-4 text-zinc-600">Social Sciences</td>
+              <td class="p-4 text-zinc-600">Humanities</td>
+              <td class="p-4 text-zinc-600">History, Arts</td>
+              <td class="p-4 text-zinc-600">Sciences, Business</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium text-zinc-700">Author Format</td>
+              <td class="p-4 text-zinc-600">Last, F. M.</td>
+              <td class="p-4 text-zinc-600">Last, First</td>
+              <td class="p-4 text-zinc-600">Last, First</td>
+              <td class="p-4 text-zinc-600">Last, F. M.</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium text-zinc-700">Date Position</td>
+              <td class="p-4 text-zinc-600">After author</td>
+              <td class="p-4 text-zinc-600">After publisher</td>
+              <td class="p-4 text-zinc-600">After publisher</td>
+              <td class="p-4 text-zinc-600">After author</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium text-zinc-700">Title Case</td>
+              <td class="p-4 text-zinc-600">Sentence case</td>
+              <td class="p-4 text-zinc-600">Title case</td>
+              <td class="p-4 text-zinc-600">Title case</td>
+              <td class="p-4 text-zinc-600">Sentence case</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-medium text-zinc-700">Access Date</td>
+              <td class="p-4 text-zinc-600">Not always</td>
+              <td class="p-4 text-zinc-600">Required</td>
+              <td class="p-4 text-zinc-600">Required</td>
+              <td class="p-4 text-zinc-600">Required</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="mt-16 text-center">
+      <a href="/" class="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-8 py-3 rounded-lg font-medium transition">
+        Try It Now
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-zinc-200 py-6 text-center text-sm text-zinc-400">
+    <p>Built for students. No ads, no BS.</p>
+  </footer>
+</body>
+</html>

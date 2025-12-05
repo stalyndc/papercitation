@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Paper Citation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#fef2f2',
+              100: '#fee2e2',
+              200: '#fecaca',
+              300: '#fca5a5',
+              400: '#f87171',
+              500: '#E84545',
+              600: '#dc2626',
+              700: '#b91c1c',
+              800: '#991b1b',
+              900: '#7f1d1d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+  </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900 min-h-screen">
+
+  <!-- Nav -->
+  <nav class="flex justify-between items-center px-6 py-4 max-w-4xl mx-auto">
+    <a href="/" class="flex items-center gap-2 hover:opacity-80 transition">
+      <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
+        <span class="text-white font-bold text-sm">P</span>
+      </div>
+      <span class="font-semibold text-zinc-800">Paper Citation</span>
+    </a>
+    <div class="flex gap-6 text-sm text-zinc-500">
+      <a href="/guides.html" class="hover:text-brand-500 transition">Guides</a>
+      <a href="/formats.html" class="hover:text-brand-500 transition">Formats</a>
+      <a href="/about.html" class="text-brand-500 font-medium">About</a>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <main class="max-w-3xl mx-auto px-6 py-16">
+    <h1 class="text-4xl font-bold text-zinc-900 mb-4">About Paper Citation</h1>
+    <p class="text-lg text-zinc-600 mb-12">A free, fast, and accurate citation generator for students and researchers.</p>
+
+    <!-- Mission -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-brand-500 to-brand-600 rounded-xl p-8 text-white">
+        <h2 class="text-2xl font-bold mb-4">Our Mission</h2>
+        <p class="text-brand-50 text-lg leading-relaxed">
+          We believe that citing sources should be simple, fast, and free. Paper Citation eliminates the frustration of manual citation formatting, helping students and researchers focus on what matters—their work.
+        </p>
+      </div>
+    </section>
+
+    <!-- Why We Built This -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">Why We Built This</h2>
+      <div class="bg-white rounded-xl border border-zinc-200 p-6">
+        <p class="text-zinc-600 mb-4">
+          Citation tools should be accessible to everyone. We were frustrated with existing solutions that hide features behind paywalls, show intrusive ads, or require account creation for basic functionality.
+        </p>
+        <p class="text-zinc-600 mb-4">
+          Paper Citation is our answer: a completely free tool that respects your privacy, loads instantly, and generates accurate citations from any source—whether it's a website URL, academic DOI, book ISBN, or YouTube video.
+        </p>
+        <p class="text-zinc-600">
+          Built with modern web technologies and deployed on Cloudflare's edge network, Paper Citation delivers instant citations from anywhere in the world.
+        </p>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">What Makes Us Different</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-zinc-900 mb-2">Privacy First</h3>
+          <p class="text-sm text-zinc-600">No account required. No tracking. No storage of your citations or search history. What you cite stays with you.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-zinc-900 mb-2">Lightning Fast</h3>
+          <p class="text-sm text-zinc-600">Powered by Cloudflare Workers, running at the edge. Citations generate in milliseconds, not seconds.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-zinc-900 mb-2">100% Free Forever</h3>
+          <p class="text-sm text-zinc-600">No hidden costs, no premium features, no ads. Every feature is free for everyone, always.</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-zinc-200 p-6">
+          <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+          </div>
+          <h3 class="font-semibold text-zinc-900 mb-2">Accurate Sources</h3>
+          <p class="text-sm text-zinc-600">We fetch metadata from authoritative APIs: CrossRef for DOIs, Google Books and OpenLibrary for books, and more.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">How It Works</h2>
+      <div class="bg-white rounded-xl border border-zinc-200 p-6">
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-zinc-100 text-zinc-600 rounded-full flex items-center justify-center text-sm font-semibold">1</div>
+            <div>
+              <h3 class="font-semibold text-zinc-900 mb-1">Smart Input Detection</h3>
+              <p class="text-sm text-zinc-600">Our system automatically detects whether you've entered a URL, DOI, ISBN, or search query, and routes it appropriately.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-zinc-100 text-zinc-600 rounded-full flex items-center justify-center text-sm font-semibold">2</div>
+            <div>
+              <h3 class="font-semibold text-zinc-900 mb-1">Metadata Fetching</h3>
+              <p class="text-sm text-zinc-600">We query trusted academic databases and APIs to retrieve accurate publication information including authors, titles, dates, and publishers.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-zinc-100 text-zinc-600 rounded-full flex items-center justify-center text-sm font-semibold">3</div>
+            <div>
+              <h3 class="font-semibold text-zinc-900 mb-1">Citation Generation</h3>
+              <p class="text-sm text-zinc-600">We format the metadata according to the official style guides for APA 7, MLA 9, Chicago, and Harvard, ensuring accuracy and compliance.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-zinc-100 text-zinc-600 rounded-full flex items-center justify-center text-sm font-semibold">4</div>
+            <div>
+              <h3 class="font-semibold text-zinc-900 mb-1">Edit & Export</h3>
+              <p class="text-sm text-zinc-600">Review and edit any field if needed, then copy your perfectly formatted citation with a single click.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technology -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">Technology Stack</h2>
+      <div class="bg-white rounded-xl border border-zinc-200 p-6">
+        <p class="text-zinc-600 mb-4">
+          Paper Citation is built with modern, open-source technologies for maximum performance and reliability:
+        </p>
+        <ul class="space-y-2 text-zinc-600">
+          <li class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span><strong>Cloudflare Workers:</strong> Serverless edge computing for instant global response times</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span><strong>TypeScript:</strong> Type-safe code for reliability and maintainability</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span><strong>Hono Framework:</strong> Lightweight, fast web framework optimized for edge computing</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+            </svg>
+            <span><strong>Tailwind CSS:</strong> Modern, utility-first CSS for a clean, responsive interface</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Data Sources -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">Data Sources</h2>
+      <div class="bg-white rounded-xl border border-zinc-200 p-6">
+        <p class="text-zinc-600 mb-4">
+          We retrieve citation metadata from these trusted sources:
+        </p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-medium text-zinc-900">CrossRef</p>
+              <p class="text-sm text-zinc-500">Academic journal articles via DOI</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 bg-green-100 text-green-600 rounded flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-medium text-zinc-900">Google Books API</p>
+              <p class="text-sm text-zinc-500">Book metadata and ISBNs</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 bg-amber-100 text-amber-600 rounded flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-medium text-zinc-900">OpenLibrary</p>
+              <p class="text-sm text-zinc-500">Open book database and search</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 bg-red-100 text-red-600 rounded flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="font-medium text-zinc-900">YouTube oEmbed</p>
+              <p class="text-sm text-zinc-500">Video titles and creators</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-zinc-900 mb-6">Support & Feedback</h2>
+      <div class="bg-white rounded-xl border border-zinc-200 p-6">
+        <p class="text-zinc-600 mb-4">
+          We're constantly improving Paper Citation based on user feedback. If you encounter any issues or have suggestions for new features, we'd love to hear from you.
+        </p>
+        <p class="text-zinc-600">
+          While we don't have a contact form (to maintain our no-tracking policy), you can reach us through GitHub issues or social media for support and feature requests.
+        </p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="mt-16 text-center">
+      <a href="/" class="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-8 py-3 rounded-lg font-medium transition">
+        Start Citing
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-zinc-200 py-6 text-center text-sm text-zinc-400">
+    <p>Built for students. No ads, no BS.</p>
+  </footer>
+</body>
+</html>
