@@ -50,7 +50,6 @@ app.post("/api/cite", async (c) => {
 
     let metadata: SourceMetadata | null = null;
 
-    // Detect source type and fetch metadata
     const sourceType = detectSourceType(source);
     console.log("Source type detected:", sourceType);
 
@@ -70,18 +69,24 @@ app.post("/api/cite", async (c) => {
       case "url":
         metadata = await fetchURLMetadata(source);
         break;
+      case "text":
+        // Try Google Books first, then OpenLibrary
+        metadata = await searchGoogleBooks(source);
+        if (!metadata) {
+          metadata = await searchOpenLibrary(source);
+        }
+        break;
     }
 
     console.log("Metadata fetched:", metadata ? "success" : "null");
 
-    // If we got metadata from APIs, format citations directly
     if (metadata) {
       metadata.accessDate = today;
       const citations = formatAllCitations(metadata, todayShort);
       return c.json({ citations });
     }
 
-    // Fallback to Gemini for unstructured sources
+    // Fallback to Gemini
     console.log("Falling back to Gemini");
     const citations = await generateWithGemini(source, today, c.env.GEMINI_API_KEY);
     return c.json({ citations });
@@ -97,33 +102,84 @@ app.post("/api/cite", async (c) => {
 function detectSourceType(source: string): "doi" | "isbn" | "youtube" | "wikipedia" | "url" | "text" {
   const s = source.trim().toLowerCase();
 
-  // DOI detection
   if (s.startsWith("10.") || s.includes("doi.org/")) {
     return "doi";
   }
 
-  // ISBN detection (10 or 13 digits)
   const isbnClean = source.replace(/[-\s]/g, "");
   if (/^(?:\d{10}|\d{13})$/.test(isbnClean)) {
     return "isbn";
   }
 
-  // YouTube detection
   if (s.includes("youtube.com") || s.includes("youtu.be")) {
     return "youtube";
   }
 
-  // Wikipedia detection
   if (s.includes("wikipedia.org")) {
     return "wikipedia";
   }
 
-  // URL detection
   if (s.startsWith("http://") || s.startsWith("https://")) {
     return "url";
   }
 
   return "text";
+}
+
+// ============ GOOGLE BOOKS API (Primary for book searches) ============
+
+async function searchGoogleBooks(query: string): Promise<SourceMetadata | null> {
+  try {
+    const response = await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5&printType=books`
+    );
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+
+    if (!data.items || data.items.length === 0) return null;
+
+    // Find best match - prefer exact title matches
+    const queryLower = query.toLowerCase().trim();
+    let bestMatch = data.items[0];
+    
+    for (const item of data.items) {
+      const title = item.volumeInfo?.title?.toLowerCase() || "";
+      if (title === queryLower) {
+        bestMatch = item;
+        break;
+      }
+    }
+
+    const info = bestMatch.volumeInfo;
+    if (!info) return null;
+
+    const authors = info.authors || [];
+    
+    // Extract year from publishedDate (format: "1958" or "1958-06-17")
+    let year: string | undefined;
+    if (info.publishedDate) {
+      const yearMatch = info.publishedDate.match(/^\d{4}/);
+      if (yearMatch) {
+        year = yearMatch[0];
+      }
+    }
+
+    return {
+      authors,
+      title: info.title || query,
+      siteName: info.publisher || "Unknown Publisher",
+      publisher: info.publisher,
+      year,
+      url: info.infoLink || `https://books.google.com/books?id=${bestMatch.id}`,
+      accessDate: "",
+      type: "book",
+    };
+  } catch (e) {
+    console.error("Google Books error:", e);
+    return null;
+  }
 }
 
 // ============ DOI - CrossRef API ============
@@ -171,12 +227,58 @@ async function fetchDOIMetadata(source: string): Promise<SourceMetadata | null> 
   }
 }
 
-// ============ ISBN - OpenLibrary API ============
+// ============ ISBN - Multiple sources ============
 
 async function fetchISBNMetadata(source: string): Promise<SourceMetadata | null> {
+  const isbn = source.replace(/[-\s]/g, "");
+  
+  // Try Google Books first
+  const googleResult = await searchGoogleBooksByISBN(isbn);
+  if (googleResult) return googleResult;
+  
+  // Fallback to OpenLibrary
+  return await fetchOpenLibraryByISBN(isbn);
+}
+
+async function searchGoogleBooksByISBN(isbn: string): Promise<SourceMetadata | null> {
   try {
-    const isbn = source.replace(/[-\s]/g, "");
-    
+    const response = await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`
+    );
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+
+    if (!data.items || data.items.length === 0) return null;
+
+    const info = data.items[0].volumeInfo;
+    if (!info) return null;
+
+    let year: string | undefined;
+    if (info.publishedDate) {
+      const yearMatch = info.publishedDate.match(/^\d{4}/);
+      if (yearMatch) year = yearMatch[0];
+    }
+
+    return {
+      authors: info.authors || [],
+      title: info.title || "Untitled",
+      siteName: info.publisher || "Unknown Publisher",
+      publisher: info.publisher,
+      year,
+      url: info.infoLink || `https://books.google.com/books?q=isbn:${isbn}`,
+      accessDate: "",
+      type: "book",
+    };
+  } catch (e) {
+    console.error("Google Books ISBN error:", e);
+    return null;
+  }
+}
+
+async function fetchOpenLibraryByISBN(isbn: string): Promise<SourceMetadata | null> {
+  try {
     const response = await fetch(
       `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`
     );
@@ -203,7 +305,39 @@ async function fetchISBNMetadata(source: string): Promise<SourceMetadata | null>
       type: "book",
     };
   } catch (e) {
-    console.error("OpenLibrary error:", e);
+    console.error("OpenLibrary ISBN error:", e);
+    return null;
+  }
+}
+
+// ============ OpenLibrary Search (Fallback) ============
+
+async function searchOpenLibrary(query: string): Promise<SourceMetadata | null> {
+  try {
+    const response = await fetch(
+      `https://openlibrary.org/search.json?title=${encodeURIComponent(query)}&limit=1`
+    );
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    
+    if (!data.docs || data.docs.length === 0) return null;
+
+    const book = data.docs[0];
+    
+    return {
+      authors: book.author_name || [],
+      title: book.title || query,
+      siteName: book.publisher?.[0] || "Unknown Publisher",
+      publisher: book.publisher?.[0],
+      year: book.first_publish_year?.toString(),
+      url: `https://openlibrary.org${book.key}`,
+      accessDate: "",
+      type: "book",
+    };
+  } catch (e) {
+    console.error("OpenLibrary search error:", e);
     return null;
   }
 }
@@ -234,18 +368,16 @@ async function fetchYouTubeMetadata(source: string): Promise<SourceMetadata | nu
   }
 }
 
-// ============ Wikipedia - Direct parsing ============
+// ============ Wikipedia ============
 
 async function fetchWikipediaMetadata(source: string): Promise<SourceMetadata | null> {
   try {
-    // Extract article title from URL
     const match = source.match(/wikipedia\.org\/wiki\/([^#?]+)/);
     if (!match) return null;
 
     const articleSlug = match[1];
     const articleTitle = decodeURIComponent(articleSlug.replace(/_/g, " "));
     
-    // Wikipedia articles don't have individual authors, use title-first citation
     return {
       authors: [],
       title: articleTitle,
@@ -337,20 +469,29 @@ async function generateWithGemini(
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
 
-  const prompt = `You are a citation generator. Generate citations for this source in all 4 formats.
+  const prompt = `You are an expert citation generator. Create accurate academic citations.
 
-Source: ${source}
-Today's date: ${today}
+IMPORTANT: You must provide REAL, ACCURATE bibliographic information from your knowledge.
 
-Generate citations in these formats:
-- APA 7
-- MLA 9  
-- Chicago
-- Harvard
+Source to cite: "${source}"
 
-If information is missing, make reasonable inferences or use "n.d." for no date.
+Research and provide:
+- Author's full name
+- Exact title
+- Publisher name  
+- Original publication year (not reprint year)
 
-Respond ONLY with valid JSON:
+Generate citations using <i>...</i> for italics:
+
+1. APA 7: Author, A. A. (Year). <i>Title</i>. Publisher.
+2. MLA 9: Author. <i>Title</i>. Publisher, Year.
+3. Chicago: Author. <i>Title</i>. Place: Publisher, Year.
+4. Harvard: Author (Year) <i>Title</i>. Publisher.
+
+DO NOT guess. If you don't know the exact information, respond with this exact JSON:
+{"error": "Could not find accurate citation data"}
+
+Otherwise respond with valid JSON only:
 {
   "apa7": "citation",
   "mla9": "citation", 
@@ -363,13 +504,21 @@ Respond ONLY with valid JSON:
 
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (jsonMatch) {
-    return JSON.parse(jsonMatch[0]);
+    const parsed = JSON.parse(jsonMatch[0]);
+    if (parsed.error) {
+      throw new Error(parsed.error);
+    }
+    return parsed;
   }
 
-  throw new Error("Failed to parse Gemini response");
+  throw new Error("Failed to parse response");
 }
 
 // ============ CITATION FORMATTERS ============
+
+function italic(text: string): string {
+  return `<i>${text}</i>`;
+}
 
 function formatAllCitations(meta: SourceMetadata, todayShort: string): Record<string, string> {
   return {
@@ -381,90 +530,135 @@ function formatAllCitations(meta: SourceMetadata, todayShort: string): Record<st
 }
 
 function formatAPA7(m: SourceMetadata): string {
-  const date = m.year 
-    ? `(${m.year}${m.month ? ", " + m.month : ""}${m.day ? " " + m.day : ""})`
-    : "(n.d.)";
+  const date = m.year ? `(${m.year})` : "(n.d.)";
 
   if (m.type === "encyclopedia") {
-    // Wikipedia/Encyclopedia format
-    return `${m.title}. ${date}. In ${m.siteName}. Retrieved ${m.accessDate}, from ${m.url}`;
+    return `${m.title}. ${date}. In ${italic(m.siteName)}. Retrieved ${m.accessDate}, from ${m.url}`;
   }
   
   if (m.type === "book") {
-    const author = m.authors.length > 0 ? m.authors.join(", ") : "Unknown";
-    return `${author} ${date}. ${m.title}. ${m.publisher || m.siteName}.`;
+    const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : "Unknown";
+    return `${author} ${date}. ${italic(m.title)}. ${m.publisher || m.siteName}.`;
   }
   
   if (m.type === "video") {
     const author = m.authors.length > 0 ? m.authors.join(", ") : "Unknown";
-    return `${author} ${date}. ${m.title} [Video]. ${m.siteName}. ${m.url}`;
+    return `${author} ${date}. ${italic(m.title)} [Video]. ${m.siteName}. ${m.url}`;
+  }
+
+  if (m.type === "article") {
+    const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : "Unknown";
+    return `${author} ${date}. ${m.title}. ${italic(m.siteName)}. ${m.url}`;
   }
   
-  // Default website/article
-  const author = m.authors.length > 0 ? m.authors.join(", ") : m.siteName;
-  return `${author} ${date}. ${m.title}. ${m.siteName}. ${m.url}`;
+  const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : m.siteName;
+  return `${author} ${date}. ${italic(m.title)}. ${m.siteName}. ${m.url}`;
 }
 
 function formatMLA9(m: SourceMetadata, todayShort: string): string {
-  const date = m.year 
-    ? `${m.day ? m.day + " " : ""}${m.month ? m.month + " " : ""}${m.year}`
-    : "n.d.";
-
   if (m.type === "encyclopedia") {
-    return `"${m.title}." ${m.siteName}, ${date}, ${m.url}. Accessed ${todayShort}.`;
+    return `"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}, ${m.url}. Accessed ${todayShort}.`;
   }
   
   if (m.type === "book") {
-    const author = m.authors.length > 0 ? m.authors.join(", ") + ". " : "";
-    return `${author}${m.title}. ${m.publisher || m.siteName}, ${m.year || "n.d."}.`;
+    const author = m.authors.length > 0 ? formatAuthorMLA(m.authors) + ". " : "";
+    return `${author}${italic(m.title)}. ${m.publisher || m.siteName}, ${m.year || "n.d."}.`;
   }
   
   if (m.type === "video") {
-    const author = m.authors.length > 0 ? m.authors.join(", ") + ". " : "";
-    return `${author}"${m.title}." ${m.siteName}, ${date}, ${m.url}. Accessed ${todayShort}.`;
+    const author = m.authors.length > 0 ? formatAuthorMLA(m.authors) + ". " : "";
+    return `${author}"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}, ${m.url}. Accessed ${todayShort}.`;
+  }
+
+  if (m.type === "article") {
+    const author = m.authors.length > 0 ? formatAuthorMLA(m.authors) + ". " : "";
+    return `${author}"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}, ${m.url}. Accessed ${todayShort}.`;
   }
   
-  const author = m.authors.length > 0 ? m.authors.join(", ") + ". " : "";
-  return `${author}"${m.title}." ${m.siteName}, ${date}, ${m.url}. Accessed ${todayShort}.`;
+  const author = m.authors.length > 0 ? formatAuthorMLA(m.authors) + ". " : "";
+  return `${author}"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}, ${m.url}. Accessed ${todayShort}.`;
 }
 
 function formatChicago(m: SourceMetadata): string {
-  const date = m.year 
-    ? `${m.month ? m.month + " " : ""}${m.day ? m.day + ", " : ""}${m.year}`
-    : "n.d.";
-
   if (m.type === "encyclopedia") {
-    return `${m.siteName}. "${m.title}." Accessed ${m.accessDate}. ${m.url}.`;
+    return `${italic(m.siteName)}. "${m.title}." Accessed ${m.accessDate}. ${m.url}.`;
   }
 
   if (m.type === "book") {
-    const author = m.authors.length > 0 ? m.authors.join(", ") + ". " : "";
-    return `${author}${m.title}. ${m.siteName}, ${m.year || "n.d."}.`;
+    const author = m.authors.length > 0 ? formatAuthorMLA(m.authors) + ". " : "";
+    return `${author}${italic(m.title)}. ${m.publisher || m.siteName}, ${m.year || "n.d."}.`;
+  }
+
+  if (m.type === "article") {
+    const author = m.authors.length > 0 ? formatAuthorMLA(m.authors) + ". " : "";
+    return `${author}"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}. ${m.url}.`;
   }
   
-  const author = m.authors.length > 0 ? m.authors.join(", ") + ". " : "";
-  return `${author}"${m.title}." ${m.siteName}. ${date}. ${m.url}.`;
+  const author = m.authors.length > 0 ? formatAuthorMLA(m.authors) + ". " : "";
+  return `${author}"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}. ${m.url}.`;
 }
 
 function formatHarvard(m: SourceMetadata): string {
   const year = m.year || "n.d.";
 
   if (m.type === "encyclopedia") {
-    return `${m.siteName} (${year}) ${m.title}. Available at: ${m.url} (Accessed: ${m.accessDate}).`;
+    return `${italic(m.siteName)} (${year}) ${m.title}. Available at: ${m.url} (Accessed: ${m.accessDate}).`;
   }
 
   if (m.type === "book") {
-    const author = m.authors.length > 0 ? m.authors.join(", ") : "Unknown";
-    return `${author} (${year}) ${m.title}. ${m.publisher || m.siteName}.`;
+    const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : "Unknown";
+    return `${author} (${year}) ${italic(m.title)}. ${m.publisher || m.siteName}.`;
   }
   
   if (m.type === "video") {
-    const author = m.authors.length > 0 ? m.authors.join(", ") : "Unknown";
-    return `${author} (${year}) ${m.title} [Video]. Available at: ${m.url} (Accessed: ${m.accessDate}).`;
+    const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : "Unknown";
+    return `${author} (${year}) ${italic(m.title)} [Video]. Available at: ${m.url} (Accessed: ${m.accessDate}).`;
+  }
+
+  if (m.type === "article") {
+    const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : "Unknown";
+    return `${author} (${year}) ${m.title}. ${italic(m.siteName)}. Available at: ${m.url} (Accessed: ${m.accessDate}).`;
   }
   
-  const author = m.authors.length > 0 ? m.authors.join(", ") : m.siteName;
-  return `${author} (${year}) ${m.title}, ${m.siteName}. Available at: ${m.url} (Accessed: ${m.accessDate}).`;
+  const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : m.siteName;
+  return `${author} (${year}) ${italic(m.title)}, ${m.siteName}. Available at: ${m.url} (Accessed: ${m.accessDate}).`;
+}
+
+// ============ AUTHOR FORMATTERS ============
+
+function formatAuthorAPA(authors: string[]): string {
+  if (authors.length === 0) return "Unknown";
+  
+  return authors.map(name => {
+    const parts = name.split(" ");
+    if (parts.length === 1) return name;
+    const lastName = parts[parts.length - 1];
+    const initials = parts.slice(0, -1).map(p => p[0].toUpperCase() + ".").join(" ");
+    return `${lastName}, ${initials}`;
+  }).join(", & ");
+}
+
+function formatAuthorMLA(authors: string[]): string {
+  if (authors.length === 0) return "Unknown";
+  
+  if (authors.length === 1) {
+    const parts = authors[0].split(" ");
+    if (parts.length === 1) return authors[0];
+    const lastName = parts[parts.length - 1];
+    const firstName = parts.slice(0, -1).join(" ");
+    return `${lastName}, ${firstName}`;
+  }
+  
+  const parts = authors[0].split(" ");
+  const lastName = parts[parts.length - 1];
+  const firstName = parts.slice(0, -1).join(" ");
+  const firstAuthor = `${lastName}, ${firstName}`;
+  
+  if (authors.length === 2) {
+    return `${firstAuthor}, and ${authors[1]}`;
+  }
+  
+  return `${firstAuthor}, et al.`;
 }
 
 // ============ HELPERS ============

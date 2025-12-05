@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -37,6 +37,9 @@
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .citation-text i {
+      font-style: italic;
+    }
   </style>
 </head>
 <body class="bg-zinc-50 text-zinc-900 min-h-screen">
@@ -120,7 +123,7 @@
           </button>
         </div>
         <div class="p-5">
-          <p id="citation-text" class="text-zinc-800 leading-relaxed font-mono text-sm bg-zinc-50 p-4 rounded-lg break-words"></p>
+          <p id="citation-text" class="citation-text text-zinc-800 leading-relaxed font-mono text-sm bg-zinc-50 p-4 rounded-lg break-words"></p>
           <div class="flex gap-3 mt-4">
             <button onclick="copyCitation()" id="copy-main-btn" class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-2.5 rounded-lg font-medium transition flex items-center justify-center gap-2 text-sm">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,28 +148,28 @@
               <span class="text-xs font-medium text-zinc-500">APA 7</span>
               <button onclick="copyFormat('apa7', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
             </div>
-            <p id="format-apa7" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+            <p id="format-apa7" class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
           </div>
           <div>
             <div class="flex justify-between items-center mb-2">
               <span class="text-xs font-medium text-zinc-500">MLA 9</span>
               <button onclick="copyFormat('mla9', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
             </div>
-            <p id="format-mla9" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+            <p id="format-mla9" class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
           </div>
           <div>
             <div class="flex justify-between items-center mb-2">
               <span class="text-xs font-medium text-zinc-500">Chicago</span>
               <button onclick="copyFormat('chicago', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
             </div>
-            <p id="format-chicago" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+            <p id="format-chicago" class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
           </div>
           <div>
             <div class="flex justify-between items-center mb-2">
               <span class="text-xs font-medium text-zinc-500">Harvard</span>
               <button onclick="copyFormat('harvard', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
             </div>
-            <p id="format-harvard" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
+            <p id="format-harvard" class="citation-text font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
           </div>
         </div>
       </div>
@@ -263,7 +266,7 @@
       
       // Update displayed citation if we have results
       if (citations[style]) {
-        document.getElementById('citation-text').textContent = citations[style];
+        document.getElementById('citation-text').innerHTML = citations[style];
         document.getElementById('result-style').textContent = `${styleLabels[style]} Format`;
       }
     }
@@ -299,14 +302,14 @@
         // Store all citations
         citations = data.citations;
 
-        // Display result
-        document.getElementById('citation-text').textContent = citations[currentStyle];
+        // Display result (using innerHTML to render italic tags)
+        document.getElementById('citation-text').innerHTML = citations[currentStyle];
         document.getElementById('result-style').textContent = `${styleLabels[currentStyle]} Format`;
         
         // Populate all formats
         Object.keys(citations).forEach(style => {
           const el = document.getElementById(`format-${style}`);
-          if (el) el.textContent = citations[style];
+          if (el) el.innerHTML = citations[style];
         });
 
         document.getElementById('loading').classList.add('hidden');
@@ -334,8 +337,16 @@
       }
     }
 
+    // Get plain text from HTML (strips italic tags for clipboard)
+    function getPlainText(html) {
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+      return temp.textContent || temp.innerText || '';
+    }
+
     function copyCitation() {
-      const text = document.getElementById('citation-text').textContent;
+      const html = citations[currentStyle];
+      const text = getPlainText(html);
       navigator.clipboard.writeText(text);
       
       // Brief feedback
@@ -353,7 +364,8 @@
     }
 
     function copyFormat(style, buttonEl) {
-      const text = document.getElementById(`format-${style}`).textContent;
+      const html = citations[style];
+      const text = getPlainText(html);
       navigator.clipboard.writeText(text);
       
       // Brief feedback
