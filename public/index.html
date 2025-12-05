@@ -18,16 +18,16 @@
           },
           colors: {
             brand: {
-              50: '#e6f7f8',
-              100: '#ccf0f2',
-              200: '#99e1e5',
-              300: '#66d2d8',
-              400: '#33c3cb',
-              500: '#00ADB5',
-              600: '#009ba3',
-              700: '#007a80',
-              800: '#00585c',
-              900: '#003739',
+              50: '#fef2f2',
+              100: '#fee2e2',
+              200: '#fecaca',
+              300: '#fca5a5',
+              400: '#f87171',
+              500: '#E84545',
+              600: '#dc2626',
+              700: '#b91c1c',
+              800: '#991b1b',
+              900: '#7f1d1d',
             }
           }
         }
@@ -43,12 +43,12 @@
   
   <!-- Nav -->
   <nav class="flex justify-between items-center px-6 py-4 max-w-4xl mx-auto">
-    <div class="flex items-center gap-2">
+    <a href="/" class="flex items-center gap-2 hover:opacity-80 transition">
       <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
         <span class="text-white font-bold text-sm">P</span>
       </div>
       <span class="font-semibold text-zinc-800">Paper Citation</span>
-    </div>
+    </a>
     <div class="flex gap-6 text-sm text-zinc-500">
       <a href="#" class="hover:text-brand-500 transition">Guides</a>
       <a href="#" class="hover:text-brand-500 transition">Formats</a>
@@ -89,16 +89,25 @@
         type="text"
         id="source-input"
         placeholder="Paste a URL, DOI, ISBN, or article title..."
-        class="w-full px-5 py-4 text-base rounded-xl border-2 border-zinc-200 focus:border-brand-500 focus:outline-none shadow-sm transition bg-white"
+        class="w-full px-5 py-4 pr-32 text-base rounded-xl border-2 border-zinc-200 focus:border-brand-500 focus:outline-none shadow-sm transition bg-white"
         onkeydown="if(event.key === 'Enter') generateCitation()"
       >
-      <button
-        onclick="generateCitation()"
-        id="cite-btn"
-        class="absolute right-2 top-1/2 -translate-y-1/2 bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium transition text-sm"
-      >
-        Cite
-      </button>
+      <div class="absolute right-2 top-1/2 -translate-y-1/2 flex gap-2">
+        <button
+          onclick="clearForm()"
+          id="clear-btn"
+          class="hidden bg-zinc-100 hover:bg-zinc-200 text-zinc-600 px-3 py-2.5 rounded-lg font-medium transition text-sm"
+        >
+          Clear
+        </button>
+        <button
+          onclick="generateCitation()"
+          id="cite-btn"
+          class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium transition text-sm"
+        >
+          Cite
+        </button>
+      </div>
     </div>
 
     <!-- Result -->
@@ -106,18 +115,18 @@
       <div class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden">
         <div class="px-5 py-3 bg-zinc-50 border-b border-zinc-200 flex justify-between items-center">
           <span id="result-style" class="text-sm font-medium text-zinc-700">APA 7 Format</span>
-          <button onclick="showAllFormats()" class="text-sm text-brand-500 hover:text-brand-600 font-medium">
+          <button onclick="showAllFormats()" id="toggle-formats-btn" class="text-sm text-brand-500 hover:text-brand-600 font-medium">
             Show all formats
           </button>
         </div>
         <div class="p-5">
           <p id="citation-text" class="text-zinc-800 leading-relaxed font-mono text-sm bg-zinc-50 p-4 rounded-lg break-words"></p>
           <div class="flex gap-3 mt-4">
-            <button onclick="copyCitation()" class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-2.5 rounded-lg font-medium transition flex items-center justify-center gap-2 text-sm">
+            <button onclick="copyCitation()" id="copy-main-btn" class="flex-1 bg-brand-500 hover:bg-brand-600 text-white py-2.5 rounded-lg font-medium transition flex items-center justify-center gap-2 text-sm">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
               </svg>
-              Copy Citation
+              <span>Copy Citation</span>
             </button>
           </div>
         </div>
@@ -134,28 +143,28 @@
           <div>
             <div class="flex justify-between items-center mb-2">
               <span class="text-xs font-medium text-zinc-500">APA 7</span>
-              <button onclick="copyFormat('apa7')" class="text-xs text-brand-500 hover:text-brand-600">Copy</button>
+              <button onclick="copyFormat('apa7', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
             </div>
             <p id="format-apa7" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
           </div>
           <div>
             <div class="flex justify-between items-center mb-2">
               <span class="text-xs font-medium text-zinc-500">MLA 9</span>
-              <button onclick="copyFormat('mla9')" class="text-xs text-brand-500 hover:text-brand-600">Copy</button>
+              <button onclick="copyFormat('mla9', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
             </div>
             <p id="format-mla9" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
           </div>
           <div>
             <div class="flex justify-between items-center mb-2">
               <span class="text-xs font-medium text-zinc-500">Chicago</span>
-              <button onclick="copyFormat('chicago')" class="text-xs text-brand-500 hover:text-brand-600">Copy</button>
+              <button onclick="copyFormat('chicago', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
             </div>
             <p id="format-chicago" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
           </div>
           <div>
             <div class="flex justify-between items-center mb-2">
               <span class="text-xs font-medium text-zinc-500">Harvard</span>
-              <button onclick="copyFormat('harvard')" class="text-xs text-brand-500 hover:text-brand-600">Copy</button>
+              <button onclick="copyFormat('harvard', this)" class="text-xs text-brand-500 hover:text-brand-600 font-medium">Copy</button>
             </div>
             <p id="format-harvard" class="font-mono text-sm bg-zinc-50 p-3 rounded-lg text-zinc-700 break-words"></p>
           </div>
@@ -210,6 +219,7 @@
   <script>
     let currentStyle = 'apa7';
     let citations = {};
+    let allFormatsVisible = false;
 
     const styleLabels = {
       apa7: 'APA 7',
@@ -217,6 +227,30 @@
       chicago: 'Chicago',
       harvard: 'Harvard'
     };
+
+    // Show/hide clear button based on input
+    const sourceInput = document.getElementById('source-input');
+    const clearBtn = document.getElementById('clear-btn');
+    
+    sourceInput.addEventListener('input', () => {
+      if (sourceInput.value.trim()) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+    });
+
+    function clearForm() {
+      sourceInput.value = '';
+      clearBtn.classList.add('hidden');
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('all-formats').classList.add('hidden');
+      document.getElementById('error').classList.add('hidden');
+      allFormatsVisible = false;
+      document.getElementById('toggle-formats-btn').textContent = 'Show all formats';
+      citations = {};
+      sourceInput.focus();
+    }
 
     function selectStyle(style) {
       currentStyle = style;
@@ -238,11 +272,16 @@
       const input = document.getElementById('source-input').value.trim();
       if (!input) return;
 
+      // Show clear button
+      clearBtn.classList.remove('hidden');
+
       // Hide previous results, show loading
       document.getElementById('result').classList.add('hidden');
       document.getElementById('all-formats').classList.add('hidden');
       document.getElementById('error').classList.add('hidden');
       document.getElementById('loading').classList.remove('hidden');
+      allFormatsVisible = false;
+      document.getElementById('toggle-formats-btn').textContent = 'Show all formats';
 
       try {
         const response = await fetch('/api/cite', {
@@ -281,7 +320,18 @@
     }
 
     function showAllFormats() {
-      document.getElementById('all-formats').classList.toggle('hidden');
+      const allFormats = document.getElementById('all-formats');
+      const toggleBtn = document.getElementById('toggle-formats-btn');
+      
+      allFormatsVisible = !allFormatsVisible;
+      
+      if (allFormatsVisible) {
+        allFormats.classList.remove('hidden');
+        toggleBtn.textContent = 'Hide all formats';
+      } else {
+        allFormats.classList.add('hidden');
+        toggleBtn.textContent = 'Show all formats';
+      }
     }
 
     function copyCitation() {
@@ -289,15 +339,34 @@
       navigator.clipboard.writeText(text);
       
       // Brief feedback
-      const btn = event.target.closest('button');
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Copied!';
-      setTimeout(() => btn.innerHTML = originalText, 1500);
+      const btn = document.getElementById('copy-main-btn');
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Copied!</span>';
+      btn.classList.remove('bg-brand-500', 'hover:bg-brand-600');
+      btn.classList.add('bg-green-500');
+      
+      setTimeout(() => {
+        btn.innerHTML = originalHTML;
+        btn.classList.remove('bg-green-500');
+        btn.classList.add('bg-brand-500', 'hover:bg-brand-600');
+      }, 1500);
     }
 
-    function copyFormat(style) {
+    function copyFormat(style, buttonEl) {
       const text = document.getElementById(`format-${style}`).textContent;
       navigator.clipboard.writeText(text);
+      
+      // Brief feedback
+      const originalText = buttonEl.textContent;
+      buttonEl.textContent = 'Copied!';
+      buttonEl.classList.remove('text-brand-500', 'hover:text-brand-600');
+      buttonEl.classList.add('text-green-500');
+      
+      setTimeout(() => {
+        buttonEl.textContent = originalText;
+        buttonEl.classList.remove('text-green-500');
+        buttonEl.classList.add('text-brand-500', 'hover:text-brand-600');
+      }, 1500);
     }
   </script>
 </body>
