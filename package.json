@@ -7,9 +7,13 @@
 		"cf-typegen": "wrangler types --env-interface CloudflareBindings"
 	},
 	"dependencies": {
+		"@google/generative-ai": "^0.24.1",
 		"hono": "^4.10.7"
 	},
 	"devDependencies": {
+		"autoprefixer": "^10.4.22",
+		"postcss": "^8.5.6",
+		"tailwindcss": "^4.1.17",
 		"wrangler": "^4.53.0"
 	}
 }
