@@ -23,22 +23,29 @@ function formatAPA7(m: SourceMetadata): string {
 
   if (m.type === "book") {
     const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : "Unknown";
-    return `${author} ${date}. ${italic(m.title)}. ${m.publisher || m.siteName}.`;
+    return `${author}. ${date}. ${italic(m.title)}. ${m.publisher || m.siteName}.`;
   }
 
   if (m.type === "video") {
     const author = m.authors.length > 0 ? m.authors.join(", ") : "Unknown";
-    return `${author} ${date}. ${italic(m.title)} [Video]. ${m.siteName}. ${m.url}`;
+    return `${author}. ${date}. ${italic(m.title)} [Video]. ${m.siteName}. ${m.url}`;
   }
 
   if (m.type === "article") {
     const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : "Unknown";
-    return `${author} ${date}. ${m.title}. ${italic(m.siteName)}. ${m.url}`;
+    return `${author}. ${date}. ${m.title}. ${italic(m.siteName)}. ${m.url}`;
   }
 
   // Default website
   const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : m.siteName;
-  return `${author} ${date}. ${italic(m.title)}. ${m.siteName}. ${m.url}`;
+  const authorIsSiteName = m.authors.length === 0 || author.toLowerCase() === m.siteName.toLowerCase();
+  
+  // If author is same as site name, omit site name (APA 7 rule)
+  if (authorIsSiteName) {
+    return `${author}. ${date}. ${italic(m.title)}. ${m.url}`;
+  }
+  
+  return `${author}. ${date}. ${italic(m.title)}. ${m.siteName}. ${m.url}`;
 }
 
 function formatMLA9(m: SourceMetadata, todayShort: string): string {
@@ -61,8 +68,12 @@ function formatMLA9(m: SourceMetadata, todayShort: string): string {
     return `${author}"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}, ${m.url}. Accessed ${todayShort}.`;
   }
 
-  // Default website
-  const author = m.authors.length > 0 ? formatAuthorMLA(m.authors) + ". " : "";
+  // Default website - MLA starts with title when no author
+  if (m.authors.length === 0) {
+    return `"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}, ${m.url}. Accessed ${todayShort}.`;
+  }
+  
+  const author = formatAuthorMLA(m.authors) + ". ";
   return `${author}"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}, ${m.url}. Accessed ${todayShort}.`;
 }
 
@@ -81,8 +92,12 @@ function formatChicago(m: SourceMetadata): string {
     return `${author}"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}. ${m.url}.`;
   }
 
-  // Default website
-  const author = m.authors.length > 0 ? formatAuthorMLA(m.authors) + ". " : "";
+  // Default website - Chicago starts with title when no author
+  if (m.authors.length === 0) {
+    return `"${m.title}." ${italic(m.siteName)}. Accessed ${m.accessDate}. ${m.url}.`;
+  }
+  
+  const author = formatAuthorMLA(m.authors) + ". ";
   return `${author}"${m.title}." ${italic(m.siteName)}, ${m.year || "n.d."}. ${m.url}.`;
 }
 
@@ -110,5 +125,12 @@ function formatHarvard(m: SourceMetadata): string {
 
   // Default website
   const author = m.authors.length > 0 ? formatAuthorAPA(m.authors) : m.siteName;
+  const authorIsSiteName = m.authors.length === 0;
+  
+  // If no author (using site name), omit redundant site name
+  if (authorIsSiteName) {
+    return `${author} (${year}) ${italic(m.title)}. Available at: ${m.url} (Accessed: ${m.accessDate}).`;
+  }
+  
   return `${author} (${year}) ${italic(m.title)}, ${m.siteName}. Available at: ${m.url} (Accessed: ${m.accessDate}).`;
 }
